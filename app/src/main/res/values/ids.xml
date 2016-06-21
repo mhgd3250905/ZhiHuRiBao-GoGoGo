@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="rv_home" type="id">rv_home</item>
+    <item name="fl_home" type="id">fl_home</item>
+</resources>
