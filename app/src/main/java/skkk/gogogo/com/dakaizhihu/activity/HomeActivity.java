@@ -12,18 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.fragment.HomeFragemnt;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    @ViewInject(R.id.fl_home)
-    FrameLayout flHome;
+
 
 
     @Override

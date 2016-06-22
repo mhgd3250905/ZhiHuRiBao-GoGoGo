@@ -2,4 +2,6 @@
 <resources>
     <item name="rv_home" type="id">rv_home</item>
     <item name="fl_home" type="id">fl_home</item>
+    <item name="niv_home_image" type="id">niv_home_image</item>
+    <item name="tv_home_title" type="id">tv_home_title</item>
 </resources>

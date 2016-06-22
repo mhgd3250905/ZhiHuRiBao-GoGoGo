@@ -2,11 +2,32 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    app:cardCornerRadius="5dp"
-    android:layout_margin="@dimen/homeitem"
+    android:layout_margin="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <com.android.volley.toolbox.NetworkImageView
+            android:layout_weight="1"
+            android:id="@id/niv_home_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="@string/Str_home_card_title_content"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@id/tv_home_title"/>
+    </LinearLayout>
 
 
 
