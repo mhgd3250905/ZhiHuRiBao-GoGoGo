@@ -1,17 +1,18 @@
 package skkk.gogogo.com.dakaizhihu.fragment;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.HomeGson.HomeData;
 import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
@@ -46,7 +48,8 @@ public class HomeFragemnt extends Fragment{
     private String getData;//c从网络端获取到的数据
     private HomeData homeData;//获取到的home数据类
     private List<Story> mData;
-    private ImageLoader imageLoader;
+    private SwipeRefreshLayout mSwipeRefreshWidget;
+    private ImageLoader loader;
 
     /*
     * @desc 创建之方法
@@ -69,18 +72,7 @@ public class HomeFragemnt extends Fragment{
         //创建队列
         RequestQueue queue= Volley.newRequestQueue(getActivity());
 
-        //创建ImageLoader
-        imageLoader = new ImageLoader(queue, new ImageLoader.ImageCache() {
-            @Override
-            public Bitmap getBitmap(String s) {
-                return null;
-            }
-
-            @Override
-            public void putBitmap(String s, Bitmap bitmap) {
-
-            }
-        });
+        loader = new ImageLoader(queue, new BitmapCache());
 
         //URL
         String url="http://news-at.zhihu.com/api/4/news/latest";
@@ -98,17 +90,21 @@ public class HomeFragemnt extends Fragment{
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
+                if (mSwipeRefreshWidget.isRefreshing()){
+                    mSwipeRefreshWidget.setRefreshing(false);
+                }
                 //发送消息
                 mHandler.sendEmptyMessage(0);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                if (mSwipeRefreshWidget.isRefreshing()){
+                    mSwipeRefreshWidget.setRefreshing(false);
+                    Toast.makeText(getActivity(), "无法获取网络", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
         queue.add(request);
     }
     /*
@@ -127,8 +123,9 @@ public class HomeFragemnt extends Fragment{
 
             /*创建并设置Adapter*/
 
-            HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,imageLoader);
+            HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,loader);
             mRecyclerView.setAdapter(homeAdapter);
+
         }
     };
 
@@ -144,6 +141,14 @@ public class HomeFragemnt extends Fragment{
         mRecyclerView.setLayoutManager(mLayoutManager);
         /*如果可以确定每个item的高度是固定的设置这个选项可以提高性能*/
         mRecyclerView.setHasFixedSize(true);
+        /*设置SwipeRefreshLayout*/
+        mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initData();
+            }
+        });
 
     }
 }

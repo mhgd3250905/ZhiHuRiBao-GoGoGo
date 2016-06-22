@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <com.android.volley.toolbox.NetworkImageView
+        <ImageView
             android:layout_weight="1"
             android:id="@id/niv_home_image"
             android:layout_width="0dp"
