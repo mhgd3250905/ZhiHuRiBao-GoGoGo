@@ -1,6 +1,8 @@
 package skkk.gogogo.com.dakaizhihu.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,6 +52,7 @@ public class HomeFragemnt extends Fragment{
     private List<Story> mData;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private ImageLoader loader;
+    private SharedPreferences mPref;
 
     /*
     * @desc 创建之方法
@@ -59,6 +62,7 @@ public class HomeFragemnt extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home,container,false);
+        mPref=getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         initUI();
         initData();
         return view;
@@ -124,6 +128,21 @@ public class HomeFragemnt extends Fragment{
             /*创建并设置Adapter*/
 
             HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,loader);
+            homeAdapter.setOnItemClickLitener(new HomeAdapter.OnItemClickLitener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    int id = mData.get(position).getId();
+                    String details="http://news-at.zhihu.com/api/4/news/"+id;
+                    mPref.edit().putString("url_from_home",details).commit();
+                    NewsDetailsFragment newsDetailsFragment=new NewsDetailsFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.fl_home,newsDetailsFragment).commit();
+                }
+
+                @Override
+                public void onItemLongClick(View view, int position) {
+
+                }
+            });
             mRecyclerView.setAdapter(homeAdapter);
 
         }
@@ -149,6 +168,7 @@ public class HomeFragemnt extends Fragment{
                 initData();
             }
         });
+
 
     }
 }

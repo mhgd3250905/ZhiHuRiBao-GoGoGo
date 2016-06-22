@@ -69,6 +69,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     */
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+
         try {
             ImageLoader.ImageListener listener=ImageLoader.getImageListener(holder.nivHomeImage,
                     R.drawable.ic_launcher,R.drawable.fall);

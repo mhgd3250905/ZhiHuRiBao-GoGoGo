@@ -4,4 +4,7 @@
     <item name="fl_home" type="id">fl_home</item>
     <item name="niv_home_image" type="id">niv_home_image</item>
     <item name="tv_home_title" type="id">tv_home_title</item>
+    <item name="wv_news_details" type="id">wv_news_details</item>
+    <item name="iv_splash" type="id">iv_splash</item>
+    <item name="tv_splash_author" type="id">tv_splash_author</item>
 </resources>
