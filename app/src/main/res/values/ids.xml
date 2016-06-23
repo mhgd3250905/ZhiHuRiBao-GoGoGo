@@ -7,4 +7,5 @@
     <item name="wv_news_details" type="id">wv_news_details</item>
     <item name="iv_splash" type="id">iv_splash</item>
     <item name="tv_splash_author" type="id">tv_splash_author</item>
+    <item name="tv_news_details" type="id">tv_news_details</item>
 </resources>
