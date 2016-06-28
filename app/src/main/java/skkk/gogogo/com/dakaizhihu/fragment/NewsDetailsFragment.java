@@ -11,8 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -50,7 +49,7 @@ public class NewsDetailsFragment extends Fragment{
     private Document document;
     private String title;
     private String html;
-    private WebView wvNewsDetails;
+    private TextView tvNewsDetail;
 
     @Nullable
     @Override
@@ -59,13 +58,7 @@ public class NewsDetailsFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_news_details, container, false);
         mPref=getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         url = mPref.getString("url_from_home", "http://www.baidu.com");
-        wvNewsDetails= (WebView) view.findViewById(R.id.wv_news_details);
-        wvNewsDetails.getSettings().setJavaScriptEnabled(false);
-        wvNewsDetails.getSettings().setSupportZoom(false);
-        wvNewsDetails.getSettings().setBuiltInZoomControls(false);
-        wvNewsDetails.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        wvNewsDetails.getSettings().setDefaultFontSize(18);
-
+        tvNewsDetail= (TextView) view.findViewById(R.id.tv_news_details);
         initData();
 
         return view;
@@ -79,7 +72,6 @@ public class NewsDetailsFragment extends Fragment{
             Gson gson = new Gson();
             java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
             }.getType();
-
             newsDetailsData = gson.fromJson(getData, type);
 
             try {
@@ -115,7 +107,7 @@ public class NewsDetailsFragment extends Fragment{
                 sb.append(element.text()+"\r\n");
             }
 
-            wvNewsDetails.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+            tvNewsDetail.setText(sb.toString());
         }
     };
 

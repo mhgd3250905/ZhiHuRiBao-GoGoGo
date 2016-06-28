@@ -43,7 +43,7 @@ import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
 * 作    者：ksheng
 * 时    间：6/21
 */
-public class HomeFragemnt extends Fragment {
+public class HomeFragemnt extends Fragment{
     private RecyclerView mRecyclerView;//recyclerView
     private LinearLayoutManager mLayoutManager;//线性布局管理器
     private View view;//加载之view
@@ -61,27 +61,27 @@ public class HomeFragemnt extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
-        mPref = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
+        view = inflater.inflate(R.layout.fragment_home,container,false);
+        mPref=getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         initUI();
         initData();
         return view;
     }
 
-    /*
-    * @desc 获取网络数据
-    * @时间 2016/6/22 11:50
-    */
+/*
+* @desc 获取网络数据
+* @时间 2016/6/22 11:50
+*/
     private void initData() {
         //创建队列
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(getActivity());
 
         loader = new ImageLoader(queue, new BitmapCache());
 
         //URL
-        String url = "http://news-at.zhihu.com/api/4/news/latest";
+        String url="http://news-at.zhihu.com/api/4/news/latest";
 
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -90,11 +90,11 @@ public class HomeFragemnt extends Fragment {
 
                 try {
                     //获取标准制式的数据
-                    getData = new String(s.getBytes("ISO-8859-1"), "utf-8");
+                    getData = new String (s.getBytes("ISO-8859-1"),"utf-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                if (mSwipeRefreshWidget.isRefreshing()) {
+                if (mSwipeRefreshWidget.isRefreshing()){
                     mSwipeRefreshWidget.setRefreshing(false);
                 }
                 //发送消息
@@ -103,7 +103,7 @@ public class HomeFragemnt extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (mSwipeRefreshWidget.isRefreshing()) {
+                if (mSwipeRefreshWidget.isRefreshing()){
                     mSwipeRefreshWidget.setRefreshing(false);
                     Toast.makeText(getActivity(), "无法获取网络", Toast.LENGTH_SHORT).show();
                 }
@@ -111,15 +111,14 @@ public class HomeFragemnt extends Fragment {
         });
         queue.add(request);
     }
-
     /*
     * @desc Handler 接收消息做出反应
     * @时间 2016/6/22 11:54
     */
-    private Handler mHandler = new Handler() {
+    private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            Log.d("TAG", getData);
+            Log.d("TAG",getData);
             Gson gson = new Gson();
             java.lang.reflect.Type type = new TypeToken<HomeData>() {
             }.getType();
@@ -128,15 +127,15 @@ public class HomeFragemnt extends Fragment {
 
             /*创建并设置Adapter*/
 
-            HomeAdapter homeAdapter = new HomeAdapter(getActivity(), mData, loader);
+            HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,loader);
             homeAdapter.setOnItemClickLitener(new HomeAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     int id = mData.get(position).getId();
-                    String details = "http://news-at.zhihu.com/api/4/news/" + id;
-                    mPref.edit().putString("url_from_home", details).commit();
-                    NewsDetailsFragment newsDetailsFragment = new NewsDetailsFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.fl_home, newsDetailsFragment).commit();
+                    String details="http://news-at.zhihu.com/api/4/news/"+id;
+                    mPref.edit().putString("url_from_home",details).commit();
+                    NewsDetailsFragment newsDetailsFragment=new NewsDetailsFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.fl_home,newsDetailsFragment).commit();
                 }
 
                 @Override
@@ -170,7 +169,6 @@ public class HomeFragemnt extends Fragment {
             }
         });
 
+
     }
-
-
 }

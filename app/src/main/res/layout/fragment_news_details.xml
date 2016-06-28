@@ -5,8 +5,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <WebView
-            android:id="@id/wv_news_details"
+        <TextView
+            android:id="@id/tv_news_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </ScrollView>
