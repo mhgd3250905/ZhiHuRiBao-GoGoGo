@@ -2,6 +2,7 @@ package skkk.gogogo.com.dakaizhihu.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.HomeGson.HomeData;
 import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
 
 /**
@@ -134,8 +136,7 @@ public class HomeFragemnt extends Fragment{
                     int id = mData.get(position).getId();
                     String details="http://news-at.zhihu.com/api/4/news/"+id;
                     mPref.edit().putString("url_from_home",details).commit();
-                    NewsDetailsFragment newsDetailsFragment=new NewsDetailsFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.fl_home,newsDetailsFragment).commit();
+                    startActivity(new Intent(getActivity(), NewsDetailActivity.class));
                 }
 
                 @Override
