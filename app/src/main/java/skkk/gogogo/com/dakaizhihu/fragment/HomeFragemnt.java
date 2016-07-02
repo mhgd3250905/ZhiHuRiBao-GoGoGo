@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +20,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
@@ -35,6 +32,7 @@ import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 
 /**
  * Created by admin on 2016/6/21.
@@ -49,7 +47,6 @@ public class HomeFragemnt extends Fragment{
     private RecyclerView mRecyclerView;//recyclerView
     private LinearLayoutManager mLayoutManager;//线性布局管理器
     private View view;//加载之view
-    private String getData;//c从网络端获取到的数据
     private HomeData homeData;//获取到的home数据类
     private List<Story> mData;
     private SwipeRefreshLayout mSwipeRefreshWidget;
@@ -83,19 +80,16 @@ public class HomeFragemnt extends Fragment{
         //URL
         String url="http://news-at.zhihu.com/api/4/news/latest";
 
-        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
+        MyStringRequest request=new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
-                //由于Volley是用的ISO-8859-1编码，这里需要把字符串转换为utf-8编码。
-                //不然会出现乱码。这个乱码跟AndroidStudio中的乱码还不一样。
+                Gson gson = new Gson();
+                java.lang.reflect.Type type = new TypeToken<HomeData>() {
+                }.getType();
+                homeData = gson.fromJson(s, type);
+                mData = homeData.getStories();
 
-                try {
-                    //获取标准制式的数据
-                    getData = new String (s.getBytes("ISO-8859-1"),"utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
                 if (mSwipeRefreshWidget.isRefreshing()){
                     mSwipeRefreshWidget.setRefreshing(false);
                 }
@@ -120,15 +114,8 @@ public class HomeFragemnt extends Fragment{
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            Log.d("TAG",getData);
-            Gson gson = new Gson();
-            java.lang.reflect.Type type = new TypeToken<HomeData>() {
-            }.getType();
-            homeData = gson.fromJson(getData, type);
-            mData = homeData.getStories();
 
             /*创建并设置Adapter*/
-
             HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,loader);
             homeAdapter.setOnItemClickLitener(new HomeAdapter.OnItemClickLitener() {
                 @Override

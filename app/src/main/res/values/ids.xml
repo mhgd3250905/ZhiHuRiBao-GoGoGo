@@ -8,4 +8,6 @@
     <item name="iv_splash" type="id">iv_splash</item>
     <item name="tv_splash_author" type="id">tv_splash_author</item>
     <item name="tv_news_details" type="id">tv_news_details</item>
+    <item name="iv_news_title" type="id">iv_news_title</item>
+    <item name="tv_news_title" type="id">tv_news_title</item>
 </resources>
