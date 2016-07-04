@@ -1,6 +1,7 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 
 import skkk.gogogo.com.dakaizhihu.PirctureGson.PictureData;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 
 public class SplashActivity extends AppCompatActivity {
     @ViewInject(R.id.iv_splash)
@@ -35,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
     private RequestQueue queue;
     private StringRequest request;
     private String getData;
+    private MySQLiteHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,12 @@ public class SplashActivity extends AppCompatActivity {
         Fresco.initialize(this);
         initUI();
         initData();
+        initDB();
+    }
+
+    private void initDB() {
+        dbHelper=new MySQLiteHelper(this,"News.db",null,1);
+        SQLiteDatabase db=dbHelper.getWritableDatabase();
     }
 
     private void initUI() {

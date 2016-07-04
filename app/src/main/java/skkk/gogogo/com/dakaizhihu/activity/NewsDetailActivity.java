@@ -2,6 +2,8 @@ package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,13 +36,14 @@ import org.jsoup.select.Elements;
 
 import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 
 public class NewsDetailActivity extends AppCompatActivity {
     @ViewInject(R.id.iv_news_title)
     SimpleDraweeView ivNewsTitle;
     SharedPreferences mPref;
-    private String url;
+    private int newsId;
     private NewDetailsData newsDetailsData;
     private WebView mWebView;
     private String newHtmlContent;
@@ -49,19 +52,56 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String imageSource;
     private CollapsingToolbarLayout collapsingToolbar;
     private String title;
+    private MySQLiteHelper dbHelper;
+    private SQLiteDatabase db;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         initUI();
-        initData();
+        initDB();
+        checkStorage();
+
+    }
+
+    /*
+    * @desc 判断是否有缓存于数据库
+    * @时间 2016/7/4 23:57
+    */
+    private void checkStorage() {
+        mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
+        newsId = mPref.getInt("news_id", 0);
+
+        db=dbHelper.getReadableDatabase();
+        Cursor cursor = db.query("News",null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            if(String.valueOf(newsId).equals(cursor.getString(4))){
+                titleImage=cursor.getString(1);
+                imageSource=cursor.getString(2);
+                newHtmlContent=cursor.getString(3);
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
+                ivNewsTitle.setImageURI(Uri.parse(titleImage));
+            }else{
+                initData();
+            }
+        }
+        if (cursor!=null){
+            cursor.close();
+        }
+        if(db!=null){
+            db.close();
+        }
+    }
+
+    private void initDB() {
+        dbHelper = new MySQLiteHelper(this, "News.db", null, 1);
     }
 
     private void initUI() {
         ViewUtils.inject(this);
-        mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
-        url = mPref.getString("url_from_home", "http://www.baidu.com");
 
         //webview初始化设置
         mWebView = (WebView) findViewById(R.id.wv_news_details);
@@ -76,13 +116,13 @@ public class NewsDetailActivity extends AppCompatActivity {
         //初始化toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_news);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
 
 
         //使用CollapsingToolbarLayout后，title需要设置到CollapsingToolbarLayout上
@@ -100,7 +140,11 @@ public class NewsDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("是否保存？", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        }).show();
             }
         });
 
@@ -121,6 +165,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     */
     private void initData() {
         //volley通过网络获取字符串信息
+        url = "http://news-at.zhihu.com/api/4/news/" + newsId;
         RequestQueue queue = Volley.newRequestQueue(this);
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override

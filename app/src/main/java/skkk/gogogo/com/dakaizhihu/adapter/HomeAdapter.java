@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -25,11 +24,9 @@ import skkk.gogogo.com.dakaizhihu.R;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
     private List<Story> mDatas;
     private Context mContext;
-    private ImageLoader imageLoader;
     private LayoutInflater inflater;
 
-    public HomeAdapter(Context mContext, List<Story> mDatas,ImageLoader imageLoader) {
-        this.imageLoader=imageLoader;
+    public HomeAdapter(Context mContext, List<Story> mDatas) {
         this.mContext = mContext;
         this.mDatas = mDatas;
         inflater = LayoutInflater.from(mContext);

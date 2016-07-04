@@ -1,9 +1,11 @@
 package skkk.gogogo.com.dakaizhihu.fragment;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,14 +26,21 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.List;
 
 import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.HomeGson.HomeData;
 import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
+import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 
 /**
@@ -43,7 +52,7 @@ import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 * 作    者：ksheng
 * 时    间：6/21
 */
-public class HomeFragemnt extends Fragment{
+public class HomeFragemnt extends Fragment {
     private RecyclerView mRecyclerView;//recyclerView
     private LinearLayoutManager mLayoutManager;//线性布局管理器
     private View view;//加载之view
@@ -52,6 +61,9 @@ public class HomeFragemnt extends Fragment{
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private ImageLoader loader;
     private SharedPreferences mPref;
+    private MySQLiteHelper dbHelper;
+    private SQLiteDatabase db;
+    private HomeAdapter homeAdapter;
 
     /*
     * @desc 创建之方法
@@ -60,27 +72,33 @@ public class HomeFragemnt extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home,container,false);
-        mPref=getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        mPref = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         initUI();
         initData();
+        initDB();
         return view;
     }
 
-/*
-* @desc 获取网络数据
-* @时间 2016/6/22 11:50
-*/
+    private void initDB() {
+        dbHelper = new MySQLiteHelper(getActivity(), "News.db", null, 1);
+    }
+
+    /*
+    * @desc 获取网络数据
+    * @时间 2016/6/22 11:50
+    */
     private void initData() {
+
         //创建队列
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         loader = new ImageLoader(queue, new BitmapCache());
 
         //URL
-        String url="http://news-at.zhihu.com/api/4/news/latest";
+        String url = "http://news-at.zhihu.com/api/4/news/latest";
 
-        MyStringRequest request=new MyStringRequest(url, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -90,16 +108,18 @@ public class HomeFragemnt extends Fragment{
                 homeData = gson.fromJson(s, type);
                 mData = homeData.getStories();
 
-                if (mSwipeRefreshWidget.isRefreshing()){
+                if (mSwipeRefreshWidget.isRefreshing()) {
                     mSwipeRefreshWidget.setRefreshing(false);
                 }
+
+
                 //发送消息
                 mHandler.sendEmptyMessage(0);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (mSwipeRefreshWidget.isRefreshing()){
+                if (mSwipeRefreshWidget.isRefreshing()) {
                     mSwipeRefreshWidget.setRefreshing(false);
                     Toast.makeText(getActivity(), "无法获取网络", Toast.LENGTH_SHORT).show();
                 }
@@ -107,23 +127,82 @@ public class HomeFragemnt extends Fragment{
         });
         queue.add(request);
     }
+
+
+    private NewDetailsData newsDetailsData;
+    private String title;
+    private String titleImage;
+    private String imageSource;
+    private Document doc_dis;
+    private String newHtmlContent;
     /*
-    * @desc Handler 接收消息做出反应
-    * @时间 2016/6/22 11:54
-    */
-    private Handler mHandler=new Handler(){
+                                * @desc Handler 接收消息做出反应
+                                * @时间 2016/6/22 11:54
+                                */
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             /*创建并设置Adapter*/
-            HomeAdapter homeAdapter=new HomeAdapter(getActivity(),mData,loader);
+            homeAdapter = new HomeAdapter(getActivity(), mData);
             homeAdapter.setOnItemClickLitener(new HomeAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    int id = mData.get(position).getId();
-                    String details="http://news-at.zhihu.com/api/4/news/"+id;
-                    mPref.edit().putString("url_from_home",details).commit();
-                    startActivity(new Intent(getActivity(), NewsDetailActivity.class));
+                    final int id = mData.get(position).getId();
+                    String details = "http://news-at.zhihu.com/api/4/news/" + id;
+                    mPref.edit().putInt("news_id", id).commit();
+
+                    //volley通过网络获取字符串信息
+                    RequestQueue queue = Volley.newRequestQueue(getActivity());
+                    MyStringRequest request = new MyStringRequest(details, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            Gson gson = new Gson();
+                            java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
+                            }.getType();
+                            newsDetailsData = gson.fromJson(s, type);
+                            title = newsDetailsData.getTitle();
+                            titleImage = newsDetailsData.getImage();
+                            imageSource = newsDetailsData.getImage_source();
+
+                            doc_dis = null;
+                            doc_dis = Jsoup.parse(newsDetailsData.getBody());
+                            Elements ele_Img = doc_dis.getElementsByTag("img");
+                            if (ele_Img.size() != 0) {
+                                for (Element e_Img : ele_Img) {
+                                    e_Img.attr("style", "width:100%");
+                                    if (e_Img.className().equals("avatar")) {
+                                        e_Img.attr("style", "width:8%");
+                                    }
+                                }
+                            }
+                            newHtmlContent = doc_dis.toString();
+                            db = dbHelper.getWritableDatabase();
+                            ContentValues values = new ContentValues();
+
+                            //开始组装第一条数据
+                            values.put("image_uri", titleImage);
+                            values.put("image_source", imageSource);
+                            values.put("html_body", newHtmlContent);
+                            values.put("news_id",id);
+                            db.insert("News", null, values);
+                            db.close();
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(getActivity(), NewsDetailActivity.class));
+                                }
+                            });
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+
+                        }
+                    });
+                    queue.add(request);
+
+
                 }
 
                 @Override
@@ -131,8 +210,8 @@ public class HomeFragemnt extends Fragment{
 
                 }
             });
+            //recyclerView添加数据适配器
             mRecyclerView.setAdapter(homeAdapter);
-
         }
     };
 
