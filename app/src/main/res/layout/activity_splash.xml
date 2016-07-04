@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="skkk.gogogo.com.dakaizhihu.activity.SplashActivity">
-<ImageView
+<com.facebook.drawee.view.SimpleDraweeView
     android:scaleType="centerCrop"
     android:fitsSystemWindows="true"
     android:id="@id/iv_splash"

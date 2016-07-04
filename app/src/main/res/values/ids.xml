@@ -10,4 +10,5 @@
     <item name="tv_news_details" type="id">tv_news_details</item>
     <item name="iv_news_title" type="id">iv_news_title</item>
     <item name="tv_news_title" type="id">tv_news_title</item>
+    <item name="app_bar" type="id">app_bar</item>
 </resources>

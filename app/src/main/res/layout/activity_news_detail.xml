@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:fitsSystemWindows="true"
+        android:id="@id/app_bar"
+        style="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        style="@style/AppTheme.AppBarOverlay">
+        android:layout_height="300dp"
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -20,48 +21,61 @@
             app:expandedTitleMarginBottom="10dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@id/iv_news_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    app:layout_collapseParallaxMultiplier="1"
+                    android:layout_alignParentTop="true" />
+
                 <android.support.v7.widget.Toolbar
-                    android:layout_gravity="top"
-                    android:elevation="0dp"
-                    android:background="#00000000"
                     android:id="@+id/tb_news"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="none"/>
-                <com.android.volley.toolbox.NetworkImageView
-                    android:layout_gravity="center"
-                    android:id="@id/iv_news_title"
-                    app:layout_collapseParallaxMultiplier="0.5"
-                    android:layout_width="1080dp"
-                    android:layout_height="match_parent" />
-                <TextView
-                    android:layout_gravity="bottom|right"
-                    android:id="@id/tv_news_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#44000000"/>
-            </FrameLayout>
-
-
+                    android:layout_gravity="top"
+                    android:background="#00000000"
+                    android:elevation="0dp"
+                    app:layout_collapseMode="pin" />
+            </RelativeLayout>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:visibility="invisible"
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_share"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="#33728dff"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|right"/>
+
     <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <WebView
 
-            android:layout_margin="1dp"
+            android:id="@id/wv_news_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@id/wv_news_details"/>
+            android:layout_margin="1dp" />
     </android.support.v4.widget.NestedScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>

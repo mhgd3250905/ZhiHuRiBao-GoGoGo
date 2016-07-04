@@ -1,20 +1,21 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.ViewUtils;
@@ -22,13 +23,12 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.io.UnsupportedEncodingException;
 
-import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.PirctureGson.PictureData;
 import skkk.gogogo.com.dakaizhihu.R;
 
 public class SplashActivity extends AppCompatActivity {
     @ViewInject(R.id.iv_splash)
-    ImageView ivSplash;
+    SimpleDraweeView ivSplash;
     @ViewInject(R.id.tv_splash_author)
     TextView tvSplashAuthor;
 
@@ -39,6 +39,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         initUI();
         initData();
     }
@@ -56,10 +57,12 @@ public class SplashActivity extends AppCompatActivity {
             }.getType();
             PictureData pictureData = gson.fromJson(getData, type);
 
-            ImageLoader loader=new ImageLoader(queue,new BitmapCache());
-            ImageLoader.ImageListener listener=ImageLoader.getImageListener(ivSplash,
-                    R.drawable.ic_launcher,R.drawable.fall);
-            loader.get(pictureData.getImg(),listener);
+//            ImageLoader loader=new ImageLoader(queue,new BitmapCache());
+//            ImageLoader.ImageListener listener=ImageLoader.getImageListener(ivSplash,
+//                    R.drawable.ic_launcher,R.drawable.fall);
+//            loader.get(pictureData.getImg(),listener);
+
+            ivSplash.setImageURI(Uri.parse(pictureData.getImg()));
 
             tvSplashAuthor.setText("BY  " + pictureData.getText());
 

@@ -1,14 +1,15 @@
 package skkk.gogogo.com.dakaizhihu.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -70,22 +71,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        try {
-            ImageLoader.ImageListener listener=ImageLoader.getImageListener(holder.nivHomeImage,
-                    R.drawable.ic_launcher,R.drawable.fall);
 
-            imageLoader.get(mDatas.get(position).getImages().get(0),
-                    listener);
-        }catch (Exception e){
-
-        }
-
-
-//        holder.nivHomeImage.setDefaultImageResId(R.drawable.ic_launcher);//默认图片
-//        holder.nivHomeImage.setErrorImageResId(R.drawable.fall);//错误图片
-//        holder.nivHomeImage.setImageUrl(mDatas.get(position).getImages().get(0),
-//                    imageLoader);//加载成功之图片
-
+        holder.nivHomeImage.setImageURI(Uri.parse(mDatas.get(position).getImages().get(0)));
         holder.tvHomeTitle.setText(mDatas.get(position).getTitle());//加载标题
 
         // 如果设置了回调，则设置点击事件
@@ -125,12 +112,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     */
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView nivHomeImage;//item 缩略图
+        SimpleDraweeView nivHomeImage;//item 缩略图
         TextView tvHomeTitle; //item标题
 
         public MyViewHolder(View view) {
             super(view);
-            nivHomeImage= (ImageView) view.findViewById(R.id.niv_home_image);
+            nivHomeImage= (SimpleDraweeView) view.findViewById(R.id.niv_home_image);
             tvHomeTitle= (TextView) view.findViewById(R.id.tv_home_title);
         }
     }

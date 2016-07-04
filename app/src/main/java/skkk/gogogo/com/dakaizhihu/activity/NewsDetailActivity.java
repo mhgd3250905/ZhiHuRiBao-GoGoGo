@@ -3,23 +3,25 @@ package skkk.gogogo.com.dakaizhihu.activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.ViewUtils;
@@ -30,16 +32,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 
 public class NewsDetailActivity extends AppCompatActivity {
-    @ViewInject(R.id.tv_news_title)
-    TextView tvNewsTitle;
     @ViewInject(R.id.iv_news_title)
-    NetworkImageView ivNewsTitle;
+    SimpleDraweeView ivNewsTitle;
     SharedPreferences mPref;
     private String url;
     private NewDetailsData newsDetailsData;
@@ -49,6 +48,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String titleImage;
     private String imageSource;
     private CollapsingToolbarLayout collapsingToolbar;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +74,16 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
         //初始化toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_news);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         //使用CollapsingToolbarLayout后，title需要设置到CollapsingToolbarLayout上
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -85,6 +93,17 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleGravity(Gravity.CENTER);//设置收缩之后的标题位置
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);//设置收缩之后的字体颜色
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
+
+        //设置FAB
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
 
     }
 
@@ -110,6 +129,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
                 }.getType();
                 newsDetailsData = gson.fromJson(s, type);
+                title = newsDetailsData.getTitle();
                 titleImage = newsDetailsData.getImage();
                 imageSource = newsDetailsData.getImage_source();
 
@@ -130,14 +150,9 @@ public class NewsDetailActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvNewsTitle.setText(imageSource);
+                        getSupportActionBar().setDisplayShowTitleEnabled(false);
                         mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
-                        RequestQueue queue2 = Volley.newRequestQueue(NewsDetailActivity.this);
-                        ImageLoader imageLoader = new ImageLoader(queue2, new BitmapCache());
-                        ivNewsTitle.setDefaultImageResId(R.drawable.ic_launcher);
-                        ivNewsTitle.setErrorImageResId(R.drawable.ic_launcher);
-                        ivNewsTitle.setImageUrl(titleImage,
-                                imageLoader);
+                        ivNewsTitle.setImageURI(Uri.parse(titleImage));
 
                     }
                 });
