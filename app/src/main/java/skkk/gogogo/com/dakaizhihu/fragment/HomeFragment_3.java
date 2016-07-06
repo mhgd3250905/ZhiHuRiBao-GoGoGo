@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,15 +38,16 @@ import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
 /**
- * Created by admin on 2016/6/21.
+ * Created by admin on 2016/7/5.
  */
 /*
 * 
-* 描    述：用于显示所有文章列表的fragment
+* 描    述：
 * 作    者：ksheng
-* 时    间：6/21
+* 时    间：
 */
-public class HomeFragemnt extends android.support.v4.app.Fragment {
+public class HomeFragment_3 extends Fragment {
+
     private RecyclerView mRecyclerView;//recyclerView
     private LinearLayoutManager mLayoutManager;//线性布局管理器
     private View view;//加载之view
@@ -95,7 +97,7 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
         loader = new ImageLoader(queue, new BitmapCache());
 
         //URL
-        String url = URLStringUtils.getHOMENEWSLISTURL();
+        String url = URLStringUtils.getPASTNEWSLISTURL("20160705");
 
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override

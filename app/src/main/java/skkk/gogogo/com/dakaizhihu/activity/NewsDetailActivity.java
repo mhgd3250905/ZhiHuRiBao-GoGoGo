@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -7,8 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,6 +38,7 @@ import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
+import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
 public class NewsDetailActivity extends AppCompatActivity {
     @ViewInject(R.id.iv_news_title)
@@ -62,38 +63,43 @@ public class NewsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_detail);
         initUI();
         initDB();
-        checkStorage();
-
+        if (checkStorage()){
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
+            ivNewsTitle.setImageURI(Uri.parse(titleImage));
+            Toast.makeText(NewsDetailActivity.this, "来自SQL", Toast.LENGTH_SHORT).show();
+        }else {
+            initData();
+        }
     }
 
+
+
     /*
-    * @desc 判断是否有缓存于数据库
-    * @时间 2016/7/4 23:57
-    */
-    private void checkStorage() {
+        * @desc 判断是否有缓存于数据库
+        * @时间 2016/7/4 23:57
+        */
+    private boolean checkStorage() {
         mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
         newsId = mPref.getInt("news_id", 0);
 
-        db=dbHelper.getReadableDatabase();
+        db=dbHelper.getWritableDatabase();
         Cursor cursor = db.query("News",null,null,null,null,null,null);
         while (cursor.moveToNext()){
             if(String.valueOf(newsId).equals(cursor.getString(4))){
                 titleImage=cursor.getString(1);
                 imageSource=cursor.getString(2);
                 newHtmlContent=cursor.getString(3);
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
-                mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
-                ivNewsTitle.setImageURI(Uri.parse(titleImage));
-            }else{
-                initData();
+                if (cursor!=null){
+                    cursor.close();
+                }
+                return true;
             }
         }
         if (cursor!=null){
             cursor.close();
         }
-        if(db!=null){
-            db.close();
-        }
+        return false;
     }
 
     private void initDB() {
@@ -152,12 +158,6 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-    };
 
     /*
     * @desc 获取数据
@@ -165,7 +165,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     */
     private void initData() {
         //volley通过网络获取字符串信息
-        url = "http://news-at.zhihu.com/api/4/news/" + newsId;
+        url = URLStringUtils.getNEWSDETAILSURL(String.valueOf(newsId));
         RequestQueue queue = Volley.newRequestQueue(this);
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
@@ -189,8 +189,16 @@ public class NewsDetailActivity extends AppCompatActivity {
                         }
                     }
                 }
-                newHtmlContent = doc_dis.toString();
 
+                newHtmlContent = doc_dis.toString();
+                ContentValues values = new ContentValues();
+
+                //开始组装第一条数据
+                values.put("image_uri", titleImage);
+                values.put("image_source", imageSource);
+                values.put("html_body", newHtmlContent);
+                values.put("news_id", newsId);
+                db.insert("News", null, values);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -209,5 +217,14 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(db!=null){
+            db.close();
+        }
+
     }
 }
