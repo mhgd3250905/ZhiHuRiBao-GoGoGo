@@ -3,7 +3,7 @@ package skkk.gogogo.com.dakaizhihu.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +13,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.ThemeGson.ThemeStory;
 
 /*
 * 
@@ -22,16 +22,19 @@ import skkk.gogogo.com.dakaizhihu.R;
 * 作    者：ksheng
 * 时    间：
 */
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
-    private List<Story> mDatas;
+public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder> {
+    private List<ThemeStory> mDatas;
     private Context mContext;
     private LayoutInflater inflater;
+    private OnItemClickLitener mOnItemClickLitener;
 
-    public HomeAdapter(Context mContext, List<Story> mDatas) {
+    public ThemeAdapter(Context mContext, List<ThemeStory> mDatas) {
         this.mContext = mContext;
         this.mDatas = mDatas;
         inflater = LayoutInflater.from(mContext);
     }
+
+
 
     /*
 * @desc 设置点击事件
@@ -43,7 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         void onItemLongClick(View view, int position);
     }
 
-    private OnItemClickLitener mOnItemClickLitener;
+
 
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
@@ -69,8 +72,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        if (!TextUtils.isEmpty(mDatas.get(position).getImages().get(0))){
+        try {
             holder.nivHomeImage.setImageURI(Uri.parse(mDatas.get(position).getImages().get(0)));
+        }catch (Exception e){
+            Log.d("TAG", "----------------------------无图片");
+            holder.nivHomeImage.setVisibility(View.GONE);
         }
 
         holder.tvHomeTitle.setText(mDatas.get(position).getTitle());//加载标题

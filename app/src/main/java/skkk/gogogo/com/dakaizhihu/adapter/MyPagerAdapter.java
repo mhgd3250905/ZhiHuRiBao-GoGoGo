@@ -18,10 +18,11 @@ import java.util.List;
 
 public class MyPagerAdapter extends FragmentPagerAdapter{
     private List<Fragment> fragments;
-    private String[] TITLE={"今天","昨天","前天","大前天"};
+    private String[] TITLE;
 
-    public MyPagerAdapter(FragmentManager fm,List<Fragment> fragments) {
+    public MyPagerAdapter(FragmentManager fm,List<Fragment> fragments,String[] TITLE) {
         super(fm);
+        this.TITLE=TITLE;
         this.fragments=fragments;
     }
 

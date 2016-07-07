@@ -13,4 +13,9 @@
     <item name="app_bar" type="id">app_bar</item>
     <item name="vp_home" type="id">vp_home</item>
     <item name="tpi_home" type="id">tpi_home</item>
+    <item name="srl_theme_home" type="id">srl_theme_home</item>
+    <item name="rv_theme" type="id">rv_theme</item>
+    <item name="tpi_theme" type="id">tpi_theme</item>
+    <item name="vp_theme" type="id">vp_theme</item>
+    <item name="tb_theme" type="id">tb_theme</item>
 </resources>

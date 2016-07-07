@@ -9,10 +9,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -47,15 +46,16 @@ public class NewsDetailActivity extends AppCompatActivity {
     private int newsId;
     private NewDetailsData newsDetailsData;
     private WebView mWebView;
-    private String newHtmlContent;
+    private String newsHtmlContent;
+    private String newsTitle;
     private Document doc_dis;
     private String titleImage;
     private String imageSource;
     private CollapsingToolbarLayout collapsingToolbar;
-    private String title;
     private MySQLiteHelper dbHelper;
     private SQLiteDatabase db;
     private String url;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +65,13 @@ public class NewsDetailActivity extends AppCompatActivity {
         initDB();
         if (checkStorage()){
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
-            ivNewsTitle.setImageURI(Uri.parse(titleImage));
+            mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
+            try {
+                ivNewsTitle.setImageURI(Uri.parse(titleImage));
+            }catch (Exception e){
+                ivNewsTitle.setVisibility(View.GONE);
+            }
+            Log.d("TAG","--------------------------"+newsTitle);
             Toast.makeText(NewsDetailActivity.this, "来自SQL", Toast.LENGTH_SHORT).show();
         }else {
             initData();
@@ -87,9 +92,15 @@ public class NewsDetailActivity extends AppCompatActivity {
         Cursor cursor = db.query("News",null,null,null,null,null,null);
         while (cursor.moveToNext()){
             if(String.valueOf(newsId).equals(cursor.getString(4))){
+                Log.d("TAG","--------------------------"+cursor.getString(4));
                 titleImage=cursor.getString(1);
+                Log.d("TAG","--------------------------"+titleImage);
                 imageSource=cursor.getString(2);
-                newHtmlContent=cursor.getString(3);
+                Log.d("TAG","--------------------------"+imageSource);
+                newsHtmlContent=cursor.getString(3);
+                Log.d("TAG","--------------------------content");
+                newsTitle=cursor.getString(5);
+
                 if (cursor!=null){
                     cursor.close();
                 }
@@ -120,7 +131,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
         //初始化toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_news);
+        toolbar = (Toolbar) findViewById(R.id.tb_news);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -141,18 +152,18 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
 
         //设置FAB
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("是否保存？", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        }).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("是否保存？", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                            }
+//                        }).show();
+//            }
+//        });
 
 
     }
@@ -174,7 +185,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
                 }.getType();
                 newsDetailsData = gson.fromJson(s, type);
-                title = newsDetailsData.getTitle();
+                newsTitle = newsDetailsData.getTitle();
                 titleImage = newsDetailsData.getImage();
                 imageSource = newsDetailsData.getImage_source();
 
@@ -190,22 +201,28 @@ public class NewsDetailActivity extends AppCompatActivity {
                     }
                 }
 
-                newHtmlContent = doc_dis.toString();
+                newsHtmlContent = doc_dis.toString();
                 ContentValues values = new ContentValues();
 
                 //开始组装第一条数据
                 values.put("image_uri", titleImage);
                 values.put("image_source", imageSource);
-                values.put("html_body", newHtmlContent);
+                values.put("html_body", newsHtmlContent);
                 values.put("news_id", newsId);
+                values.put("title", newsTitle);
                 db.insert("News", null, values);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         getSupportActionBar().setDisplayShowTitleEnabled(false);
-                        mWebView.loadDataWithBaseURL("", newHtmlContent, "text/html", "utf-8", "");
-                        ivNewsTitle.setImageURI(Uri.parse(titleImage));
+                        mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
+                        try {
+                            ivNewsTitle.setImageURI(Uri.parse(titleImage));
+                        }catch (Exception e){
+                            ivNewsTitle.setVisibility(View.GONE);
+                        }
+
 
                     }
                 });

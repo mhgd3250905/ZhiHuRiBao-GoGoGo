@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ public class HomeActivity extends AppCompatActivity
 
     private List<Fragment> fragmentList;
     private MyPagerAdapter adapter;
+    private String[] TITLE={"今天","昨天","前天","大前天"};
 
 
     @Override
@@ -73,8 +75,6 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        vpHome= (ViewPager) findViewById(R.id.vp_home);
-
         fragmentList=new ArrayList<Fragment>();
         Fragment homeFragemnt=new HomeFragemnt();
         Fragment homeFragemnt2=new HomeFragment_2();
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity
         fragmentList.add(homeFragemnt3);
         fragmentList.add(homeFragemnt4);
 
-        adapter=new MyPagerAdapter(getSupportFragmentManager(),fragmentList);
+        adapter=new MyPagerAdapter(getSupportFragmentManager(),fragmentList,TITLE);
 
         vpHome.setAdapter(adapter);
 
@@ -169,9 +169,12 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.homeNews) {
+
+
+        } else if (id == R.id.themeNews) {
+
+            startActivity(new Intent(this,ThemeHomeActivity.class));
 
         } else if (id == R.id.nav_slideshow) {
 

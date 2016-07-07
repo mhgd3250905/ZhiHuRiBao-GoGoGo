@@ -19,6 +19,12 @@ public class URLStringUtils {
     //过往消息列表
     private static String PASTNEWSLISTURL="http://news.at.zhihu.com/api/4/news/before/";
 
+    private static String THEMENEWSLISTURL="http://news-at.zhihu.com/api/4/theme/";
+
+    public static String getTHEMENEWSLISTURL(int id) {
+        return THEMENEWSLISTURL+id;
+    }
+
     public static String getHOMENEWSLISTURL() {
         return HOMENEWSLISTURL;
     }

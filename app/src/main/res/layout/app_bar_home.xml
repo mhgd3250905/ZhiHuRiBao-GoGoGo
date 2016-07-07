@@ -15,8 +15,14 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            app:subtitleTextAppearance="@style/ToolbarTextAppearanceSubTitle"
+            app:titleTextAppearance="@style/ToolbarTextAppearanceTitle"
+            app:subtitleTextColor="@color/white"
+            app:title="大开知乎"
+            app:subtitle="主题日报，总有你想要的"
+            app:titleTextColor="@color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>

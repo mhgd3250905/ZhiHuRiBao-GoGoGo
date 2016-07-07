@@ -23,7 +23,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + "image_uri text,"
             + "image_source text,"
             + "html_body text,"
-            + "news_id text)";
+            + "news_id text,"
+            + "title text)";
     private Context mContext;
 
     public MySQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
