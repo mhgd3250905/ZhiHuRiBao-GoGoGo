@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("TAG", "homefragment-----------------------OnCtreate");
         view = inflater.inflate(R.layout.fragment_home, container, false);
         mPref = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         initUI();
@@ -73,10 +75,35 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
         initDB();
         return view;
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d("TAG", "homefragment-----------------------OnStart");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG", "homefragment-----------------------OnPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "homefragment-----------------------OnResume");
+    }
 
     @Override
     public void onStop() {
         super.onStop();
+        Log.d("TAG", "homefragment-----------------------OnStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("TAG", "homefragment-----------------------OnDestory");
     }
 
     private void initDB() {
@@ -88,7 +115,7 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     * @时间 2016/6/22 11:50
     */
     private void initData() {
-
+        Log.d("TAG", "homefragment-----------------------开始加载数据");
         //创建队列
         queue = Volley.newRequestQueue(getActivity());
 

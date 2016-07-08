@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="skkk.gogogo.com.dakaizhihu.activity.ThemeHomeActivity">
+
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.viewpagerindicator.TabPageIndicator
+            style="@style/StyledIndicators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@id/tpi_theme"/>
+
+        <android.support.v4.view.ViewPager
+            style="@style/StyledIndicators"
+            android:id="@id/vp_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -2,7 +2,7 @@ package skkk.gogogo.com.dakaizhihu.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 * 时    间：
 */
 
-public class MyPagerAdapter extends FragmentPagerAdapter{
+public class MyPagerAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> fragments;
     private String[] TITLE;
 
