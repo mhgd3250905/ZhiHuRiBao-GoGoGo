@@ -35,7 +35,6 @@ import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
-import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
 /**
  * Created by admin on 2016/6/21.
@@ -59,11 +58,15 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     private SQLiteDatabase db;
     private HomeAdapter homeAdapter;
     private RequestQueue queue;
+    private String url;
 
+    public HomeFragemnt(String url) {
+        this.url = url;
+    }
     /*
-    * @desc 创建之方法
-    * @时间 2016/6/22 12:44
-    */
+        * @desc 创建之方法
+        * @时间 2016/6/22 12:44
+        */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,36 +77,6 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
         initData();
         initDB();
         return view;
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d("TAG", "homefragment-----------------------OnStart");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG", "homefragment-----------------------OnPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG", "homefragment-----------------------OnResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG", "homefragment-----------------------OnStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TAG", "homefragment-----------------------OnDestory");
     }
 
     private void initDB() {
@@ -121,8 +94,6 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
 
         loader = new ImageLoader(queue, new BitmapCache());
 
-        //URL
-        String url = URLStringUtils.getHOMENEWSLISTURL();
 
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
@@ -202,7 +173,37 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
                 initData();
             }
         });
+    }
 
+    /*生命周期*/
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        Log.d("TAG", "homefragment-----------------------OnStart");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG", "homefragment-----------------------OnPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "homefragment-----------------------OnResume");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("TAG", "homefragment-----------------------OnStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("TAG", "homefragment-----------------------OnDestory");
     }
 }

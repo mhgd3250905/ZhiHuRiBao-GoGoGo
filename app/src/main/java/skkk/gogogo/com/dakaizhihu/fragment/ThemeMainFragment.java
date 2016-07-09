@@ -2,14 +2,13 @@ package skkk.gogogo.com.dakaizhihu.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class ThemeMainFragment extends Fragment {
 
     ViewPager vpTheme;
 
-    TabPageIndicator tpiTheme;
+    TabLayout tpiTheme;
 
     private List<Fragment> fragmentList;
     private MyPagerAdapter adapter;
@@ -45,18 +44,15 @@ public class ThemeMainFragment extends Fragment {
         view = inflater.inflate(R.layout.activity_theme_main,container,false);
         Log.d("TAG", "222-----------------------OnCreate");
         initUI();
-
         return view;
     }
 
 
-
-
     private void initUI() {
         vpTheme= (ViewPager) view.findViewById(R.id.vp_theme);
-        tpiTheme= (TabPageIndicator) view.findViewById(R.id.tpi_theme);
+        tpiTheme= (TabLayout) view.findViewById(R.id.tpi_theme);
 
-        Log.d("TAG", "111-----------------------加载fragment");
+        Log.d("TAG", "222-----------------------加载fragment");
         fragmentList=new ArrayList<Fragment>();
 
         for(int i=2;i<14;i++){
@@ -68,23 +64,25 @@ public class ThemeMainFragment extends Fragment {
         vpTheme.setAdapter(adapter);
 
         //实例化TabPageIndicator然后设置ViewPager与之关联
-        tpiTheme.setViewPager(vpTheme);
+        tpiTheme.setupWithViewPager(vpTheme);
 
 
         //如果我们要对ViewPager设置监听，用indicator设置就行了
-        tpiTheme.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tpiTheme.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
 
             @Override
-            public void onPageSelected(int arg0) {
+            public void onTabSelected(TabLayout.Tab tab) {
+
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void onPageScrollStateChanged(int arg0) {
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
