@@ -20,14 +20,12 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.HomeGson.HomeData;
 import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
@@ -52,7 +50,6 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     private HomeData homeData;//获取到的home数据类
     private List<Story> mData;
     private SwipeRefreshLayout mSwipeRefreshWidget;
-    private ImageLoader loader;
     private SharedPreferences mPref;
     private MySQLiteHelper dbHelper;
     private SQLiteDatabase db;
@@ -91,10 +88,6 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
         Log.d("TAG", "homefragment-----------------------开始加载数据");
         //创建队列
         queue = Volley.newRequestQueue(getActivity());
-
-        loader = new ImageLoader(queue, new BitmapCache());
-
-
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -104,12 +97,9 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
                 }.getType();
                 homeData = gson.fromJson(s, type);
                 mData = homeData.getStories();
-
                 if (mSwipeRefreshWidget.isRefreshing()) {
                     mSwipeRefreshWidget.setRefreshing(false);
                 }
-
-
                 //发送消息
                 mHandler.sendEmptyMessage(0);
             }

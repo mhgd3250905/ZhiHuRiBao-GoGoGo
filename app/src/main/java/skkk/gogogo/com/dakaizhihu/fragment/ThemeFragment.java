@@ -27,7 +27,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-import skkk.gogogo.com.dakaizhihu.Cache.BitmapCache;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.ThemeGson.ThemeNewsListData;
 import skkk.gogogo.com.dakaizhihu.ThemeGson.ThemeStory;
@@ -98,8 +97,6 @@ public class ThemeFragment extends Fragment {
 
         //创建队列
         queue = Volley.newRequestQueue(getActivity());
-
-        loader = new ImageLoader(queue, new BitmapCache());
 
         //URL
         String url = URLStringUtils.getTHEMENEWSLISTURL(THEMEID);

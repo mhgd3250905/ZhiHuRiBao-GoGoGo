@@ -49,7 +49,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
-
     /*
     * @desc 创建view
     * @时间 2016/6/21 23:27
@@ -96,7 +95,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         }
     }
 
-
 /*
 * @desc 获取Item数
 * @时间 2016/6/22 13:03
@@ -121,7 +119,4 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
             tvHomeTitle= (TextView) view.findViewById(R.id.tv_home_title);
         }
     }
-
-
-
 }

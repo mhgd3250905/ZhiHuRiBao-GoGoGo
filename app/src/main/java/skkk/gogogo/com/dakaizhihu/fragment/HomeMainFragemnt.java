@@ -94,7 +94,7 @@ public class HomeMainFragemnt extends Fragment {
         tpiHome.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                adapter.getItem(tab.getPosition());
+                vpHome.setCurrentItem(tab.getPosition());
             }
 
             @Override

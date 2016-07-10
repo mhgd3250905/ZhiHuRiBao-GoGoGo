@@ -6,9 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-/**
- * Created by admin on 2016/7/6.
- */
+
 /*
 * 
 * 描    述：viewpager的

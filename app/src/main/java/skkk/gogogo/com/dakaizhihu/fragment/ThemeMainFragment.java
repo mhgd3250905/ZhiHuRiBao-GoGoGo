@@ -73,7 +73,7 @@ public class ThemeMainFragment extends Fragment {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                vpTheme.setCurrentItem(tab.getPosition());
             }
 
             @Override
