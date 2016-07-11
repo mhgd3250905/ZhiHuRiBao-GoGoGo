@@ -219,8 +219,10 @@ public class NewsDetailActivity extends AppCompatActivity {
                         mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
                         try {
                             ivNewsTitle.setImageURI(Uri.parse(titleImage));
+                            collapsingToolbar.setTitle(newsTitle);
                         }catch (Exception e){
                             ivNewsTitle.setVisibility(View.GONE);
+                            collapsingToolbar.setTitle(newsTitle);
                         }
 
 

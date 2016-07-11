@@ -10,11 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <android.support.design.widget.TabLayout
+            app:tabBackground="@color/colorPrimaryDark"
+            app:tabTextColor="#afff"
+            app:tabSelectedTextColor="@color/white"
             app:tabMode="scrollable"
             app:tabGravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@id/tpi_home"/>
+
         <android.support.v4.view.ViewPager
             android:id="@id/vp_home"
             android:layout_width="wrap_content"

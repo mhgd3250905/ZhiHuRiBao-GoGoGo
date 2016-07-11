@@ -17,6 +17,8 @@ import com.lidroid.xutils.ViewUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.fragment.HomeMainFragemnt;
 import skkk.gogogo.com.dakaizhihu.fragment.ThemeMainFragment;
@@ -99,7 +101,12 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
+            ShareSDK.initSDK(this);
+            OnekeyShare oks = new OnekeyShare();
+            oks.setText("我要分享");
+            oks.setUrl("http://www.baidu.com");
+            oks.show(HomeActivity.this);
             return true;
         }
 
