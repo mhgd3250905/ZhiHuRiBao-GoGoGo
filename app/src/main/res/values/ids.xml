@@ -18,4 +18,5 @@
     <item name="tpi_theme" type="id">tpi_theme</item>
     <item name="vp_theme" type="id">vp_theme</item>
     <item name="tb_theme" type="id">tb_theme</item>
+    <item name="tb_setting" type="id">tb_setting</item>
 </resources>

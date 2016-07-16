@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -33,6 +35,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
@@ -56,6 +60,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private String url;
     private Toolbar toolbar;
+    private String shareURL;
+    private String linkCss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +70,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         initUI();
         initDB();
         if (checkStorage()){
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            //getSupportActionBar().setDisplayShowTitleEnabled(false);
             mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
             try {
                 ivNewsTitle.setImageURI(Uri.parse(titleImage));
@@ -99,7 +105,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Log.d("TAG","--------------------------"+imageSource);
                 newsHtmlContent=cursor.getString(3);
                 Log.d("TAG","--------------------------content");
-                newsTitle=cursor.getString(5);
+                shareURL=cursor.getString(5);
+                newsTitle=cursor.getString(6);
 
                 if (cursor!=null){
                     cursor.close();
@@ -133,13 +140,14 @@ public class NewsDetailActivity extends AppCompatActivity {
         //初始化toolbar
         toolbar = (Toolbar) findViewById(R.id.tb_news);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
 
         //使用CollapsingToolbarLayout后，title需要设置到CollapsingToolbarLayout上
@@ -151,23 +159,43 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);//设置收缩之后的字体颜色
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
 
-        //设置FAB
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("是否保存？", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                            }
-//                        }).show();
-//            }
-//        });
 
 
     }
+    /*
+    * @desc 创建点击菜单
+    * @时间 2016/6/21 23:06
+    */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
 
+    /*
+   * @desc toolbar菜单
+   * @时间 2016/6/21 23:06
+   */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_share) {
+            ShareSDK.initSDK(this);
+            OnekeyShare oks = new OnekeyShare();
+            oks.setText(newsTitle+"\n"+"~~~~~~分享自大开知乎~~~~~"+"\n"+shareURL);
+
+            oks.show(NewsDetailActivity.this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
     /*
@@ -188,6 +216,9 @@ public class NewsDetailActivity extends AppCompatActivity {
                 newsTitle = newsDetailsData.getTitle();
                 titleImage = newsDetailsData.getImage();
                 imageSource = newsDetailsData.getImage_source();
+                shareURL = newsDetailsData.getShare_url();
+
+
 
                 doc_dis = null;
                 doc_dis = Jsoup.parse(newsDetailsData.getBody());
@@ -200,6 +231,25 @@ public class NewsDetailActivity extends AppCompatActivity {
                         }
                     }
                 }
+                Elements ele_Div=doc_dis.getElementsByTag("div");
+                if (ele_Div.size() != 0) {
+                    for (Element e_div : ele_Div) {
+                        e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:17px");
+                        if (e_div.className().equals("main-wrap content-wrap")) {
+                            e_div.attr("style", "margin:5");
+                        }else if(e_div.className().equals("view-more")){
+                            e_div.attr("style", "text-align:center");
+                        }
+
+                    }
+                }
+
+                Elements ele_herf=doc_dis.getElementsByTag("a");
+                if (ele_herf.size() != 0) {
+                    for (Element e_herf : ele_herf) {
+                            e_herf.attr("style","font-family:宋体;color:#607d8b");
+                    }
+                }
 
                 newsHtmlContent = doc_dis.toString();
                 ContentValues values = new ContentValues();
@@ -209,6 +259,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 values.put("image_source", imageSource);
                 values.put("html_body", newsHtmlContent);
                 values.put("news_id", newsId);
+                values.put("share_url", shareURL);
                 values.put("title", newsTitle);
                 db.insert("News", null, values);
 
@@ -216,7 +267,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         getSupportActionBar().setDisplayShowTitleEnabled(false);
-                        mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
+                        mWebView.loadDataWithBaseURL(linkCss, newsHtmlContent, "text/html", "utf-8", "");
                         try {
                             ivNewsTitle.setImageURI(Uri.parse(titleImage));
                             collapsingToolbar.setTitle(newsTitle);

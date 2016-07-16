@@ -18,8 +18,14 @@ public class URLStringUtils {
     private static String NEWSDETAILSURL="http://news-at.zhihu.com/api/4/news/";
     //过往消息列表
     private static String PASTNEWSLISTURL="http://news.at.zhihu.com/api/4/news/before/";
-
+    //主题日报列表
     private static String THEMENEWSLISTURL="http://news-at.zhihu.com/api/4/theme/";
+    //获取文章其他信息 点赞评论。。。
+    private static String NEWSIMFORMATIONS="http://news-at.zhihu.com/api/4/story-extra/";
+
+    public static String getNEWSIMFORMATIONS(int id) {
+        return NEWSIMFORMATIONS+id;
+    }
 
     public static String getTHEMENEWSLISTURL(int id) {
         return THEMENEWSLISTURL+id;

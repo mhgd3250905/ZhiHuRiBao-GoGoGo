@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -8,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,8 +17,6 @@ import com.lidroid.xutils.ViewUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.fragment.HomeMainFragemnt;
 import skkk.gogogo.com.dakaizhihu.fragment.ThemeMainFragment;
@@ -77,41 +75,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    /*
-    * @desc 创建点击菜单
-    * @时间 2016/6/21 23:06
-    */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-
-    /*
-    * @desc toolbar菜单
-    * @时间 2016/6/21 23:06
-    */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_share) {
-            ShareSDK.initSDK(this);
-            OnekeyShare oks = new OnekeyShare();
-            oks.setText("我要分享");
-            oks.setUrl("http://www.baidu.com");
-            oks.show(HomeActivity.this);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /*
     * @desc 设置侧滑菜单点击事件
@@ -137,7 +100,8 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_setting) {
+            startActivity(new Intent(HomeActivity.this,SettingActivity.class));
 
         } else if (id == R.id.nav_share) {
 

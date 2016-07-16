@@ -24,6 +24,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + "image_source text,"
             + "html_body text,"
             + "news_id text,"
+            + "share_url text,"
             + "title text)";
     private Context mContext;
 
