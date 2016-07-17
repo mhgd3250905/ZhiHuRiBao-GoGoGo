@@ -18,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.fragment.ColumnMainFragment;
 import skkk.gogogo.com.dakaizhihu.fragment.HomeMainFragemnt;
 import skkk.gogogo.com.dakaizhihu.fragment.ThemeMainFragment;
 
@@ -100,7 +101,11 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_setting) {
+        }else if(id==R.id.nav_column){
+            ColumnMainFragment columnMainFragment=new ColumnMainFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fl_home, columnMainFragment).commit();
+        }else if (id == R.id.nav_setting) {
             startActivity(new Intent(HomeActivity.this,SettingActivity.class));
 
         } else if (id == R.id.nav_share) {

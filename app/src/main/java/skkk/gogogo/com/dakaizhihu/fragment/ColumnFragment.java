@@ -26,10 +26,15 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
+import skkk.gogogo.com.dakaizhihu.ColumnData.ColumnListData;
+import skkk.gogogo.com.dakaizhihu.ColumnData.ColumnStory;
 import skkk.gogogo.com.dakaizhihu.HomeGson.HomeData;
 import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
+import skkk.gogogo.com.dakaizhihu.ImFormationListGson.ImformationListData;
+import skkk.gogogo.com.dakaizhihu.NewsImformationGson.ImformationData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
+import skkk.gogogo.com.dakaizhihu.adapter.ColumnAdapter;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
@@ -47,13 +52,13 @@ public class ColumnFragment extends android.support.v4.app.Fragment {
     private RecyclerView mRecyclerView;//recyclerView
     private LinearLayoutManager mLayoutManager;//线性布局管理器
     private View view;//加载之view
-    private HomeData homeData;//获取到的home数据类
-    private List<Story> mData;
+    private ColumnListData listData;//获取到的home数据类
+    private List<ColumnStory> mData;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private SharedPreferences mPref;
     private MySQLiteHelper dbHelper;
     private SQLiteDatabase db;
-    private HomeAdapter homeAdapter;
+    private ColumnAdapter columnAdapter;
     private RequestQueue queue;
     private String url;
 
@@ -93,10 +98,10 @@ public class ColumnFragment extends android.support.v4.app.Fragment {
             public void onResponse(String s) {
 
                 Gson gson = new Gson();
-                java.lang.reflect.Type type = new TypeToken<HomeData>() {
+                java.lang.reflect.Type type = new TypeToken<ColumnListData>() {
                 }.getType();
-                homeData = gson.fromJson(s, type);
-                mData = homeData.getStories();
+                listData = gson.fromJson(s, type);
+                mData = listData.getStories();
                 if (mSwipeRefreshWidget.isRefreshing()) {
                     mSwipeRefreshWidget.setRefreshing(false);
                 }
@@ -124,8 +129,8 @@ public class ColumnFragment extends android.support.v4.app.Fragment {
         @Override
         public void handleMessage(Message msg) {
             /*创建并设置Adapter*/
-            homeAdapter = new HomeAdapter(getActivity(), mData);
-            homeAdapter.setOnItemClickLitener(new HomeAdapter.OnItemClickLitener() {
+            columnAdapter = new ColumnAdapter(getActivity(), mData);
+            columnAdapter.setOnItemClickLitener(new ColumnAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     final int id = mData.get(position).getId();
@@ -139,7 +144,7 @@ public class ColumnFragment extends android.support.v4.app.Fragment {
                 }
             });
             //recyclerView添加数据适配器
-            mRecyclerView.setAdapter(homeAdapter);
+            mRecyclerView.setAdapter(columnAdapter);
         }
     };
 

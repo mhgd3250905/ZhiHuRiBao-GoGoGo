@@ -37,7 +37,7 @@ public class HomeMainFragemnt extends Fragment {
 
     private List<Fragment> fragmentList;
     private MyPagerAdapter adapter;
-    private String[] TITLE={"","","","","","",""};
+    private ArrayList<String> TITLE;
     private String url;
 
 
@@ -70,13 +70,14 @@ public class HomeMainFragemnt extends Fragment {
 
         Log.d("TAG", "111-----------------------加载fragment");
         fragmentList=new ArrayList<Fragment>();
+        TITLE=new ArrayList<String>();
         for (int i=0;i<7;i++){
             if(i==0){
                 url = URLStringUtils.getHOMENEWSLISTURL();
-                TITLE[i]="今天";
+                TITLE.add("今天");
             }else{
                 url=URLStringUtils.getPASTNEWSLISTURL(String.valueOf(TimeUtils.getTime(24 * 60 * 60 * 1000 * i)));
-                TITLE[i]=TimeUtils.getTimeTitle(24 * 60 * 60 * 1000 * i);
+                TITLE.add(TimeUtils.getTimeTitle(24 * 60 * 60 * 1000 * i));
             }
             Fragment homeFragemnt=new HomeFragemnt(url);
             fragmentList.add(homeFragemnt);

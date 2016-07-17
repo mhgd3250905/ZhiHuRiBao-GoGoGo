@@ -22,6 +22,24 @@ public class URLStringUtils {
     private static String THEMENEWSLISTURL="http://news-at.zhihu.com/api/4/theme/";
     //获取文章其他信息 点赞评论。。。
     private static String NEWSIMFORMATIONS="http://news-at.zhihu.com/api/4/story-extra/";
+    //获取专栏列表
+    private static String IMFORMATIONLIST="http://news-at.zhihu.com/api/3/sections";
+    //获取主题日报名称列表
+    private static String GETHOWMANYTHEMES="http://news-at.zhihu.com/api/4/themes";
+    //获取专栏具体信息条目
+    private static String GETCOLUMNLIST="http://news-at.zhihu.com/api/3/section/";
+
+    public static String getGETCOLUMNLIST(int id) {
+        return GETCOLUMNLIST+id;
+    }
+
+    public static String getGETHOWMANYTHEMES() {
+        return GETHOWMANYTHEMES;
+    }
+
+    public static String getIMFORMATIONLIST() {
+        return IMFORMATIONLIST;
+    }
 
     public static String getNEWSIMFORMATIONS(int id) {
         return NEWSIMFORMATIONS+id;

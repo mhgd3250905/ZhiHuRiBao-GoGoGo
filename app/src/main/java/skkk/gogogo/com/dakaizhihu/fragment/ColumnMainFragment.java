@@ -10,11 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import skkk.gogogo.com.dakaizhihu.ImFormationListGson.ImformationListData;
+import skkk.gogogo.com.dakaizhihu.ImFormationListGson.SingleData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.adapter.MyPagerAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.TimeUtils;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
@@ -37,8 +47,11 @@ public class ColumnMainFragment extends Fragment {
 
     private List<Fragment> fragmentList;
     private MyPagerAdapter adapter;
-    private String[] TITLE={"","","","","","",""};
+    private ArrayList<String> TITLE;
     private String url;
+    private String urlList;
+    private ImformationListData listData;
+    private List<SingleData> datas;
 
 
     /*
@@ -51,7 +64,78 @@ public class ColumnMainFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home_main, container, false);
         Log.d("TAG", "111-----------------------OnCteateView");
         initUI();
+        initData();
         return view;
+    }
+
+    private void initData() {
+        urlList = URLStringUtils.getIMFORMATIONLIST();
+        RequestQueue queue= Volley.newRequestQueue(getContext());
+        MyStringRequest request=new MyStringRequest(urlList, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                java.lang.reflect.Type type = new TypeToken<ImformationListData>() {
+                }.getType();
+                listData = gson.fromJson(s, type);
+                datas = listData.getData();
+
+                Log.d("TAG","--------------------"+ TimeUtils.getTimeTitle(0));
+
+
+                Log.d("TAG", "111-----------------------加载fragment");
+                fragmentList=new ArrayList<Fragment>();
+                TITLE=new ArrayList<String>();
+                for (int i=0;i<datas.size();i++){
+
+                    url = URLStringUtils.getGETCOLUMNLIST(datas.get(i).getId());
+                    TITLE.add(datas.get(i).getName());
+
+                    ColumnFragment columnFragment=new ColumnFragment(url);
+                    fragmentList.add(columnFragment);
+                }
+
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList, TITLE);
+
+                        vpHome.setAdapter(adapter);
+
+                        //实例化TabPageIndicator然后设置ViewPager与之关联
+                        tpiHome.setupWithViewPager(vpHome);
+
+
+                        //如果我们要对ViewPager设置监听，用indicator设置就行了
+                        tpiHome.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                            @Override
+                            public void onTabSelected(TabLayout.Tab tab) {
+                                vpHome.setCurrentItem(tab.getPosition());
+                            }
+
+                            @Override
+                            public void onTabUnselected(TabLayout.Tab tab) {
+
+                            }
+
+                            @Override
+                            public void onTabReselected(TabLayout.Tab tab) {
+
+                            }
+                        });
+                    }
+                });
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        queue.add(request);
     }
 
     /*
@@ -63,50 +147,6 @@ public class ColumnMainFragment extends Fragment {
         vpHome= (ViewPager) view.findViewById(R.id.vp_home);
         tpiHome= (TabLayout) view.findViewById(R.id.tpi_home);
 
-
-        Log.d("TAG","--------------------"+TimeUtils.getTimeTitle(0));
-
-
-
-        Log.d("TAG", "111-----------------------加载fragment");
-        fragmentList=new ArrayList<Fragment>();
-        for (int i=0;i<7;i++){
-            if(i==0){
-                url = URLStringUtils.getHOMENEWSLISTURL();
-                TITLE[i]="今天";
-            }else{
-                url=URLStringUtils.getPASTNEWSLISTURL(String.valueOf(TimeUtils.getTime(24 * 60 * 60 * 1000 * i)));
-                TITLE[i]=TimeUtils.getTimeTitle(24 * 60 * 60 * 1000 * i);
-            }
-            Fragment homeFragemnt=new HomeFragemnt(url);
-            fragmentList.add(homeFragemnt);
-        }
-
-        adapter=new MyPagerAdapter(getActivity().getSupportFragmentManager(),fragmentList,TITLE);
-
-        vpHome.setAdapter(adapter);
-
-        //实例化TabPageIndicator然后设置ViewPager与之关联
-        tpiHome.setupWithViewPager(vpHome);
-
-
-        //如果我们要对ViewPager设置监听，用indicator设置就行了
-        tpiHome.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                vpHome.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     /*
