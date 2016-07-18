@@ -48,7 +48,6 @@ public class SettingActivity extends AppCompatActivity {
         pd.setMessage("正在清理...");
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setProgressNumberFormat("");
-        pd.setProgressPercentFormat(null);
         pd.show();
         pd.setMax(100);//设置最大值
         db=helper.getWritableDatabase();

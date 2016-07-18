@@ -37,10 +37,7 @@
                 android:layout_gravity="top"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin" />
-
-
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
 
 
@@ -50,21 +47,12 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
             <WebView
                 android:fitsSystemWindows="true"
                 android:id="@id/wv_news_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp" />
-
-        </LinearLayout>
-
     </android.support.v4.widget.NestedScrollView>
 
 

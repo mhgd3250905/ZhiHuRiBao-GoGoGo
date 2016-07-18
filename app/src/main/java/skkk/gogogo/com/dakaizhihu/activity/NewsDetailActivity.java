@@ -61,12 +61,10 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String url;
     private Toolbar toolbar;
     private String shareURL;
-    private String linkCss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_detail);
         initUI();
         initDB();
         if (checkStorage()){
@@ -89,14 +87,19 @@ public class NewsDetailActivity extends AppCompatActivity {
     /*
         * @desc 判断是否有缓存于数据库
         * @时间 2016/7/4 23:57
+        * 如果有缓存那么就返回true 否则返回false
         */
     private boolean checkStorage() {
+        //从SP中获取newsId
         mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
         newsId = mPref.getInt("news_id", 0);
 
+        //获取一个可以写的数据库db
         db=dbHelper.getWritableDatabase();
+        //获取一个游标并且对db中所有的条目进行检索
         Cursor cursor = db.query("News",null,null,null,null,null,null);
         while (cursor.moveToNext()){
+            //如果db中找到对应的newsId，则获取出相应的信息
             if(String.valueOf(newsId).equals(cursor.getString(4))){
                 Log.d("TAG","--------------------------"+cursor.getString(4));
                 titleImage=cursor.getString(1);
@@ -108,6 +111,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 shareURL=cursor.getString(5);
                 newsTitle=cursor.getString(6);
 
+                //使用完毕之后关闭游标
                 if (cursor!=null){
                     cursor.close();
                 }
@@ -125,17 +129,17 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        setContentView(R.layout.activity_news_detail);
         ViewUtils.inject(this);
 
         //webview初始化设置
         mWebView = (WebView) findViewById(R.id.wv_news_details);
-        WebSettings webSetting = mWebView.getSettings();
-        webSetting.setDefaultTextEncodingName("UTF-8");
-        webSetting.setJavaScriptEnabled(false);
+        WebSettings webSetting = mWebView.getSettings();//获取webview的设置
+        webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
+        webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
         webSetting.setAllowFileAccess(true);
         webSetting.setBuiltInZoomControls(false);
         webSetting.setSupportZoom(false);
-
 
         //初始化toolbar
         toolbar = (Toolbar) findViewById(R.id.tb_news);
@@ -148,8 +152,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
         //使用CollapsingToolbarLayout后，title需要设置到CollapsingToolbarLayout上
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //通过CollapsingToolbarLayout修改字体颜色
@@ -158,9 +160,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleGravity(Gravity.CENTER);//设置收缩之后的标题位置
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);//设置收缩之后的字体颜色
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
-
-
-
     }
     /*
     * @desc 创建点击菜单
@@ -179,12 +178,7 @@ public class NewsDetailActivity extends AppCompatActivity {
    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
@@ -204,24 +198,35 @@ public class NewsDetailActivity extends AppCompatActivity {
     */
     private void initData() {
         //volley通过网络获取字符串信息
+
+        //获取url
         url = URLStringUtils.getNEWSDETAILSURL(String.valueOf(newsId));
+        //新建一个volley队列用来清幽网络数据库
         RequestQueue queue = Volley.newRequestQueue(this);
+        //新建一个String请求request
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                //获取到数据之后通过Gson来将json转化为可用的javaBean
                 Gson gson = new Gson();
                 java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
                 }.getType();
                 newsDetailsData = gson.fromJson(s, type);
+                //获取新闻标题
                 newsTitle = newsDetailsData.getTitle();
+                //获取新闻标题图片
                 titleImage = newsDetailsData.getImage();
+                //获取新闻图片来源作者
                 imageSource = newsDetailsData.getImage_source();
+                //获取分享url
                 shareURL = newsDetailsData.getShare_url();
 
 
-
                 doc_dis = null;
+                //这里通过Jsoup来获取html文本文件中的dom然后进行对应的修改
                 doc_dis = Jsoup.parse(newsDetailsData.getBody());
+
+                //把html中所有的图片都大小设置为适应100%，遇到作者头像图片设置为适应8%
                 Elements ele_Img = doc_dis.getElementsByTag("img");
                 if (ele_Img.size() != 0) {
                     for (Element e_Img : ele_Img) {
@@ -231,12 +236,14 @@ public class NewsDetailActivity extends AppCompatActivity {
                         }
                     }
                 }
+
+                //html中所有文字设置为下面的属性编剧为7dp
                 Elements ele_Div=doc_dis.getElementsByTag("div");
                 if (ele_Div.size() != 0) {
                     for (Element e_div : ele_Div) {
                         e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:17px");
                         if (e_div.className().equals("main-wrap content-wrap")) {
-                            e_div.attr("style", "margin:5");
+                            e_div.attr("style", "margin:7");
                         }else if(e_div.className().equals("view-more")){
                             e_div.attr("style", "text-align:center");
                         }
@@ -244,14 +251,17 @@ public class NewsDetailActivity extends AppCompatActivity {
                     }
                 }
 
+                //设置html文本中的超链接文字style
                 Elements ele_herf=doc_dis.getElementsByTag("a");
                 if (ele_herf.size() != 0) {
                     for (Element e_herf : ele_herf) {
                             e_herf.attr("style","font-family:宋体;color:#607d8b");
                     }
                 }
-
+                //获得webView加载需要的html文本
                 newsHtmlContent = doc_dis.toString();
+
+                //这里开始将我们前面从网络获取的data装入数据库
                 ContentValues values = new ContentValues();
 
                 //开始组装第一条数据
@@ -261,13 +271,16 @@ public class NewsDetailActivity extends AppCompatActivity {
                 values.put("news_id", newsId);
                 values.put("share_url", shareURL);
                 values.put("title", newsTitle);
+                //写入数据库
                 db.insert("News", null, values);
 
+                //我们在UI线程中进行UI更新的操作
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getSupportActionBar().setDisplayShowTitleEnabled(false);
-                        mWebView.loadDataWithBaseURL(linkCss, newsHtmlContent, "text/html", "utf-8", "");
+                        //使用WebView的 loadDataWithBaseURL（）方法
+                        //如果有图片就加载否则设置图片visible为GONE
+                        mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
                         try {
                             ivNewsTitle.setImageURI(Uri.parse(titleImage));
                             collapsingToolbar.setTitle(newsTitle);
@@ -275,8 +288,6 @@ public class NewsDetailActivity extends AppCompatActivity {
                             ivNewsTitle.setVisibility(View.GONE);
                             collapsingToolbar.setTitle(newsTitle);
                         }
-
-
                     }
                 });
             }
@@ -289,12 +300,17 @@ public class NewsDetailActivity extends AppCompatActivity {
         queue.add(request);
     }
 
+
+    /*
+    * @desc 选择在pause中关闭db防止内存泄漏
+    * @时间 2016/7/17 22:46
+    */
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
+        //为了避免内存泄漏 我们关闭db
         if(db!=null){
             db.close();
         }
-
     }
 }

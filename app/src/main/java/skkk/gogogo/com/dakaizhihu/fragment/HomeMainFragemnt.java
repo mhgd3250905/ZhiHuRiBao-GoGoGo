@@ -65,9 +65,7 @@ public class HomeMainFragemnt extends Fragment {
 
 
         Log.d("TAG","--------------------"+TimeUtils.getTimeTitle(0));
-
-
-
+        
         Log.d("TAG", "111-----------------------加载fragment");
         fragmentList=new ArrayList<Fragment>();
         TITLE=new ArrayList<String>();

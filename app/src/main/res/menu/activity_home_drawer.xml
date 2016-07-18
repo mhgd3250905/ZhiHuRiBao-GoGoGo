@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/homeNews"
-            android:icon="@drawable/menu_zhizhu"
+            android:icon="@drawable/menu_zhihu"
             android:title="大开日报" />
         <item
             android:id="@+id/themeNews"
@@ -13,7 +13,7 @@
 
         <item
             android:id="@+id/nav_column"
-            android:icon="@drawable/menu_author"
+            android:icon="@drawable/menu_column"
             android:title="知乎专栏" />
 
         <item

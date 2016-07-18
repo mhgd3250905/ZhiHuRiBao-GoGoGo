@@ -97,6 +97,7 @@ public class SplashActivity extends AppCompatActivity {
     * @时间 2016/7/6 18:57
     */
     private void initData() {
+
         boolean splashImageSave = mPref.getBoolean("splash_image_save", false);
         if (splashImageSave) {
             Log.d("TAG", "----------------------图片来自本地");
