@@ -19,4 +19,6 @@
     <item name="vp_theme" type="id">vp_theme</item>
     <item name="tb_theme" type="id">tb_theme</item>
     <item name="tb_setting" type="id">tb_setting</item>
+    <item name="NSV_details" type="id">NSV_details</item>
+    <item name="tv_setting_size" type="id">tv_setting_size</item>
 </resources>

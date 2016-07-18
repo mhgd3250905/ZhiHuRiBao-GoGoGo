@@ -5,31 +5,54 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Formatter;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+
+import java.io.File;
 
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.utils.GetFileSize;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 
 public class SettingActivity extends AppCompatActivity {
+    @ViewInject(R.id.tv_setting_size)
+    TextView tvSettingSize;
+
     private MySQLiteHelper helper;
     private SQLiteDatabase db;
     private Toolbar tbSetting;
     private ProgressDialog pd;
+    private GetFileSize getFileSize;
+    private long l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
         initDB();
+        initData();
     }
+
+
 
     private void initUI() {
         setContentView(R.layout.activity_main_activity_setting);
         ViewUtils.inject(this);
         tbSetting = (Toolbar) findViewById(R.id.tb_setting);
         setSupportActionBar(tbSetting);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        tbSetting.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+
         tbSetting.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +87,32 @@ public class SettingActivity extends AppCompatActivity {
                      pd.setProgress(i);//设置进度
                  }
                  pd.dismiss();//关闭进度条
+                 runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         tvSettingSize.setText("0K");
+                     }
+                 });
              }
          }).start();
+    }
 
+    private void initData() {
+
+        try {
+            File file=new File("/data/data/"
+                    + getPackageName() + "/databases");
+            l = getFileSize.getFolderSize(file);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(l<50*1024){
+            tvSettingSize.setText("0K");
+        }else{
+            String fileSize= Formatter.formatFileSize(this, l);
+            tvSettingSize.setText(fileSize);
+        }
 
     }
 }

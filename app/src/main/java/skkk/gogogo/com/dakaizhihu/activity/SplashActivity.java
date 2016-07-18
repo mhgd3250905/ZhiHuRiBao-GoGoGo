@@ -99,10 +99,11 @@ public class SplashActivity extends AppCompatActivity {
     private void initData() {
 
         boolean splashImageSave = mPref.getBoolean("splash_image_save", false);
+
         if (splashImageSave) {
             Log.d("TAG", "----------------------图片来自本地");
-
             ivSplash.setImageBitmap(getLoacalBitmap());
+            saveSplashPng();
             //延迟两秒发送消息跳转
             handler.sendEmptyMessageDelayed(0,2500);
         } else {

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,6 +47,8 @@ import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 public class NewsDetailActivity extends AppCompatActivity {
     @ViewInject(R.id.iv_news_title)
     SimpleDraweeView ivNewsTitle;
+    @ViewInject(R.id.NSV_details)
+    NestedScrollView nsvDetails;
     SharedPreferences mPref;
     private int newsId;
     private NewDetailsData newsDetailsData;
@@ -137,9 +140,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         WebSettings webSetting = mWebView.getSettings();//获取webview的设置
         webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
         webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
-        webSetting.setAllowFileAccess(true);
-        webSetting.setBuiltInZoomControls(false);
-        webSetting.setSupportZoom(false);
+
 
         //初始化toolbar
         toolbar = (Toolbar) findViewById(R.id.tb_news);
@@ -160,6 +161,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleGravity(Gravity.CENTER);//设置收缩之后的标题位置
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);//设置收缩之后的字体颜色
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
+
+
     }
     /*
     * @desc 创建点击菜单
