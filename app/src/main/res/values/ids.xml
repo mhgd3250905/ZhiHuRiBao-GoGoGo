@@ -21,4 +21,12 @@
     <item name="tb_setting" type="id">tb_setting</item>
     <item name="NSV_details" type="id">NSV_details</item>
     <item name="tv_setting_size" type="id">tv_setting_size</item>
+    <item name="tpi_kanzhihu" type="id">tpi_kanzhihu</item>
+    <item name="vp_kanzhihu" type="id">vp_kanzhihu</item>
+    <item name="rv_kanzhihu" type="id">rv_kanzhihu</item>
+    <item name="tb_kanzhihu" type="id">tb_kanzhihu</item>
+    <item name="srl_kanzhihu_question_list" type="id">srl_kanzhihu_question_list</item>
+    <item name="tv_kanzhihu_answer" type="id">tv_kanzhihu_answer</item>
+    <item name="sdv_kanzhihu_image" type="id">sdv_kanzhihu_image</item>
+    <item name="tv_kanzhihu_title" type="id">tv_kanzhihu_title</item>
 </resources>

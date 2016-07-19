@@ -31,4 +31,5 @@
             android:text="@string/Str_home_card_title_content"
             android:textSize="15sp" />
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

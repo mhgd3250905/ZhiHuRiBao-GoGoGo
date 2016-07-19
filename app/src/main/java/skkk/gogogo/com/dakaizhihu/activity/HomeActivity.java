@@ -20,6 +20,7 @@ import java.util.TimerTask;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.fragment.ColumnMainFragment;
 import skkk.gogogo.com.dakaizhihu.fragment.HomeMainFragemnt;
+import skkk.gogogo.com.dakaizhihu.fragment.KanzhihuFragment;
 import skkk.gogogo.com.dakaizhihu.fragment.ThemeMainFragment;
 
 public class HomeActivity extends AppCompatActivity
@@ -89,25 +90,29 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.homeNews) {
+            //知乎日报
             HomeMainFragemnt homeMainFragemnt = new HomeMainFragemnt();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fl_home, homeMainFragemnt);
             transaction.commit();
         } else if (id == R.id.themeNews) {
-
+            //主题日报
             ThemeMainFragment themeMainFragment=new ThemeMainFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fl_home, themeMainFragment).commit();
 
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_kanzhihu) {
+            //看知乎
+            KanzhihuFragment kanzhihuFragment=new KanzhihuFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fl_home, kanzhihuFragment).commit();
         }else if(id==R.id.nav_column){
+            //知乎专栏
             ColumnMainFragment columnMainFragment=new ColumnMainFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fl_home, columnMainFragment).commit();
         }else if (id == R.id.nav_setting) {
             startActivity(new Intent(HomeActivity.this,SettingActivity.class));
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

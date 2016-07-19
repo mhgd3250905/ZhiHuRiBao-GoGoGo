@@ -28,6 +28,18 @@ public class URLStringUtils {
     private static String GETHOWMANYTHEMES="http://news-at.zhihu.com/api/4/themes";
     //获取专栏具体信息条目
     private static String GETCOLUMNLIST="http://news-at.zhihu.com/api/3/section/";
+    //看知乎 获取看知乎的所有条目
+    private static String KANZHIHULIST="http://api.kanzhihu.com/getposts";
+    //看知乎 获取当天的问题内容条目
+    private static String KANZHIHUQUESTIONLIST="http://api.kanzhihu.com/getpostanswers";
+
+    public static String getKANZHIHUQUESTIONLIST(String date,String timeDesc) {
+        return KANZHIHUQUESTIONLIST+"/"+date+"/"+timeDesc;
+    }
+
+    public static String getKANZHIHULIST() {
+        return KANZHIHULIST;
+    }
 
     public static String getGETCOLUMNLIST(int id) {
         return GETCOLUMNLIST+id;

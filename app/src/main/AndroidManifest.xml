@@ -35,6 +35,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <!--新闻内容页面-->
         <activity
             android:name=".activity.NewsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -51,7 +52,12 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.SettingActivity"
+        <!--设置页面-->
+        <activity
+            android:name=".activity.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!--看知乎内容页面-->
+        <activity android:name=".activity.KanzhihuQuestionListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
