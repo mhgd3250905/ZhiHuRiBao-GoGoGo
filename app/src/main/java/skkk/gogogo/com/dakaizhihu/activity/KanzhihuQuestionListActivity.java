@@ -31,7 +31,6 @@ import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
 public class KanzhihuQuestionListActivity extends AppCompatActivity {
-    @ViewInject(R.id.tb_kanzhihu)
     Toolbar tbKanzhihu;
     @ViewInject(R.id.rv_kanzhihu)
     RecyclerView rvKanzhihu;
@@ -53,6 +52,7 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
     private void initUI() {
         setContentView(R.layout.activity_kanzhihu_question_list);
         ViewUtils.inject(this);
+        tbKanzhihu= (Toolbar) findViewById(R.id.tb_kanzhihu);
         setSupportActionBar(tbKanzhihu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tbKanzhihu.setNavigationOnClickListener(new View.OnClickListener() {

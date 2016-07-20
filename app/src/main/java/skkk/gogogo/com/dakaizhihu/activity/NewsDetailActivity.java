@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -64,6 +65,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String url;
     private Toolbar toolbar;
     private String shareURL;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,13 +188,14 @@ public class NewsDetailActivity extends AppCompatActivity {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
             oks.setText(newsTitle+"\n"+"~~~~~~分享自大开知乎~~~~~"+"\n"+shareURL);
-
+            oks.setImagePath(getFilesDir()+"/aaa.png");
             oks.show(NewsDetailActivity.this);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
 
     /*
