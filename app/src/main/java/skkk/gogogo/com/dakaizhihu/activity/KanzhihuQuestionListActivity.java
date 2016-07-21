@@ -42,6 +42,7 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
     private QuestionListData questionListData;
     private List<Answer> mData;
     private SharedPreferences mPref;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +70,15 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
         rvKanzhihu.setLayoutManager(mLayoutManager);
         /*如果可以确定每个item的高度是固定的设置这个选项可以提高性能*/
         rvKanzhihu.setHasFixedSize(true);
-
     }
 
     private void initData() {
         RequestQueue queue= Volley.newRequestQueue(this);
-        String url= URLStringUtils.getKANZHIHUQUESTIONLIST("20160719","archive");
+        Intent intent=getIntent();
+        url = intent.getStringExtra("url");
         MyStringRequest request=new MyStringRequest(url, new Response.Listener<String>() {
             @Override
-            public void onResponse(String s) {
+            public void onResponse(String s){
                 Gson gson = new Gson();
                 java.lang.reflect.Type type = new TypeToken<QuestionListData>() {
                 }.getType();
@@ -122,7 +123,7 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
 
                 }
             });
-                    //recyclerView添加数据适配器
+            //recyclerView添加数据适配器
             rvKanzhihu.setAdapter(adapter);
         }
     };

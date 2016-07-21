@@ -130,9 +130,13 @@ public class KanzhihuFragment extends android.support.v4.app.Fragment {
             kanzhihuAdapter.setOnItemClickLitener(new KanzhihuAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    final String id = mData.get(position).getId();
-                    mPref.edit().putInt("news_id", Integer.parseInt(id)).commit();
-                    startActivity(new Intent(getActivity(), KanzhihuQuestionListActivity.class));
+                    final String url_name = mData.get(position).getName();
+                    String url_date = mData.get(position).getDate().replace("-", "");
+                    String urlToQuestionList=URLStringUtils.getKANZHIHUQUESTIONLIST(url_date,url_name);
+                    Intent intent=new Intent();
+                    intent.putExtra("url",urlToQuestionList);
+                    intent.setClass(getContext(), KanzhihuQuestionListActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override
