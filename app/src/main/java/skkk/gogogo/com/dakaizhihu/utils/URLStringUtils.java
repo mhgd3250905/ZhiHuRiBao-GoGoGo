@@ -32,6 +32,12 @@ public class URLStringUtils {
     private static String KANZHIHULIST="http://api.kanzhihu.com/getposts";
     //看知乎 获取当天的问题内容条目
     private static String KANZHIHUQUESTIONLIST="http://api.kanzhihu.com/getpostanswers";
+    //看知乎 跳转到知乎问答页面
+    private static String KANZHIHUQUESTIONANDANSWER="https://www.zhihu.com/";
+
+    public static String getKANZHIHUQUESTIONANDANSWER(String quesetionId,String answeId) {
+        return KANZHIHUQUESTIONANDANSWER+"question/"+quesetionId+"/answer/"+answeId;
+    }
 
     public static String getKANZHIHUQUESTIONLIST(String date,String timeDesc) {
         return KANZHIHUQUESTIONLIST+"/"+date+"/"+timeDesc;

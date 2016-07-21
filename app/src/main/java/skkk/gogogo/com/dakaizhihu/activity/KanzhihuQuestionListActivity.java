@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,6 +32,7 @@ import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
 public class KanzhihuQuestionListActivity extends AppCompatActivity {
+    @ViewInject(R.id.tb_kanzhihu)
     Toolbar tbKanzhihu;
     @ViewInject(R.id.rv_kanzhihu)
     RecyclerView rvKanzhihu;
@@ -52,7 +54,6 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
     private void initUI() {
         setContentView(R.layout.activity_kanzhihu_question_list);
         ViewUtils.inject(this);
-        tbKanzhihu= (Toolbar) findViewById(R.id.tb_kanzhihu);
         setSupportActionBar(tbKanzhihu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tbKanzhihu.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,13 +69,7 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
         rvKanzhihu.setLayoutManager(mLayoutManager);
         /*如果可以确定每个item的高度是固定的设置这个选项可以提高性能*/
         rvKanzhihu.setHasFixedSize(true);
-        /*设置SwipeRefreshLayout*/
-        srlKanzhihuQuestionList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initData();
-            }
-        });
+
     }
 
     private void initData() {
@@ -88,19 +83,14 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
                 }.getType();
                 questionListData = gson.fromJson(s, type);
                 mData = questionListData.getAnswers();
-                if (srlKanzhihuQuestionList.isRefreshing()) {
-                    srlKanzhihuQuestionList.setRefreshing(false);
-                }
+
                 //发送消息
                 mHandler.sendEmptyMessage(0);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (srlKanzhihuQuestionList.isRefreshing()) {
-                    srlKanzhihuQuestionList.setRefreshing(false);
-                    Toast.makeText(KanzhihuQuestionListActivity.this, "无法获取网络", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
         queue.add(request);
@@ -118,9 +108,13 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
                 public void onItemClick(View view, int position) {
                     final String questionId = mData.get(position).getQuestionid();
                     final String answerId = mData.get(position).getAnswerid();
-                    mPref.edit().putString("question_id", questionId).commit();
-                    mPref.edit().putString("answer_id",answerId).commit();
-                    //startActivity(new Intent(getActivity(), NewsDetailActivity.class));
+
+                    Log.d("TAG","questionId--------------------------------"+questionId);
+                    Log.d("TAG","answerId--------------------------------"+answerId);
+                    Intent intent = new Intent();
+                    intent.putExtra("url",URLStringUtils.getKANZHIHUQUESTIONANDANSWER(questionId,answerId));
+                    intent.setClass(KanzhihuQuestionListActivity.this, WebPageActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override

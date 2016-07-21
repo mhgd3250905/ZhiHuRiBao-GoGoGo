@@ -3,6 +3,7 @@ package skkk.gogogo.com.dakaizhihu.activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -142,6 +144,22 @@ public class NewsDetailActivity extends AppCompatActivity {
         WebSettings webSetting = mWebView.getSettings();//获取webview的设置
         webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
         webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
+
+        // WebViewClient用来处理WebView各种通知、请求事件等,重写里面的方法即可
+        mWebView.setWebViewClient(new WebViewClient() {
+            // 点击页面中的链接会调用这个方法
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                // TODO Auto-generated method stub
+                // 跳转到另外的activity
+                Intent intent = new Intent();
+                intent.putExtra("url", url);
+                intent.setClass(NewsDetailActivity.this, WebPageActivity.class);
+                startActivity(intent);
+                Log.i("qing", "shouldOverrideUrlLoading..." + url);
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+        });
 
 
         //初始化toolbar

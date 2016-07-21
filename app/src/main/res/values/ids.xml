@@ -29,4 +29,5 @@
     <item name="tv_kanzhihu_answer" type="id">tv_kanzhihu_answer</item>
     <item name="sdv_kanzhihu_image" type="id">sdv_kanzhihu_image</item>
     <item name="tv_kanzhihu_title" type="id">tv_kanzhihu_title</item>
+    <item name="wv_web_page" type="id">wv_web_page</item>
 </resources>
