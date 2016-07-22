@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.adapter.MyPagerAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.TimeUtils;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
@@ -23,7 +23,7 @@ import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
  */
 /*
 * 
-* 描    述：用于显示所有文章列表的fragment
+* 描    述：用于显示所有文章列表的homefragment
 * 作    者：ksheng
 * 时    间：6/21
 */
@@ -49,10 +49,15 @@ public class HomeMainFragemnt extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home_main, container, false);
-        Log.d("TAG", "111-----------------------OnCteateView");
+
+        LogUtils.MyLog("HomeMainFragment", "OnCreate");
+
         initUI();
+        initData();
         return view;
     }
+
+
 
     /*
     * @desc UI
@@ -63,10 +68,15 @@ public class HomeMainFragemnt extends Fragment {
         vpHome= (ViewPager) view.findViewById(R.id.vp_home);
         tpiHome= (TabLayout) view.findViewById(R.id.tpi_home);
 
+        LogUtils.MyLog("HomeMainFragment", "初始化UI完毕");
+    }
 
-        Log.d("TAG","--------------------"+TimeUtils.getTimeTitle(0));
-        
-        Log.d("TAG", "111-----------------------加载fragment");
+
+    private void initData() {
+        LogUtils.MyLog("HomeMainFragment", TimeUtils.getTimeTitle(0));
+
+        LogUtils.MyLog("HomeMainFragment", "加载数据");
+
         fragmentList=new ArrayList<Fragment>();
         TITLE=new ArrayList<String>();
         for (int i=0;i<7;i++){
@@ -106,40 +116,5 @@ public class HomeMainFragemnt extends Fragment {
 
             }
         });
-    }
-
-    /*
-    * @desc 生命周期
-    * @时间 2016/7/9 13:04
-    */
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d("TAG", "111-----------------------OnStart");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG", "111-----------------------OnPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG", "111-----------------------OnResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG", "111-----------------------OnStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TAG", "111-----------------------OnDestory");
     }
 }

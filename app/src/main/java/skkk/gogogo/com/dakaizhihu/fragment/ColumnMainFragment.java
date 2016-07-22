@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import skkk.gogogo.com.dakaizhihu.ImFormationListGson.ImformationListData;
 import skkk.gogogo.com.dakaizhihu.ImFormationListGson.SingleData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.adapter.MyPagerAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.TimeUtils;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
@@ -62,7 +62,9 @@ public class ColumnMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home_main, container, false);
-        Log.d("TAG", "111-----------------------OnCteateView");
+
+        LogUtils.MyLog("ThemeMainFragment", "OnCreate");
+
         initUI();
         initData();
         return view;
@@ -80,10 +82,10 @@ public class ColumnMainFragment extends Fragment {
                 listData = gson.fromJson(s, type);
                 datas = listData.getData();
 
-                Log.d("TAG","--------------------"+ TimeUtils.getTimeTitle(0));
+                LogUtils.MyLog("ThemeMainFragment", TimeUtils.getTimeTitle(0));
 
+                LogUtils.MyLog("ThemeMainFragment", "加载数据");
 
-                Log.d("TAG", "111-----------------------加载fragment");
                 fragmentList=new ArrayList<Fragment>();
                 TITLE=new ArrayList<String>();
                 for (int i=0;i<datas.size();i++){
@@ -147,40 +149,7 @@ public class ColumnMainFragment extends Fragment {
         vpHome= (ViewPager) view.findViewById(R.id.vp_home);
         tpiHome= (TabLayout) view.findViewById(R.id.tpi_home);
 
+        LogUtils.MyLog("ThemeMainFragment", "UI加载完毕");
     }
 
-    /*
-    * @desc 生命周期
-    * @时间 2016/7/9 13:04
-    */
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d("TAG", "111-----------------------OnStart");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG", "111-----------------------OnPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG", "111-----------------------OnResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG", "111-----------------------OnStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TAG", "111-----------------------OnDestory");
-    }
 }

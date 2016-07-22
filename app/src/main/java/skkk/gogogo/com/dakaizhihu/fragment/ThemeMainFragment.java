@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.ThemeGson.GetThemeData;
 import skkk.gogogo.com.dakaizhihu.ThemeGson.Other;
 import skkk.gogogo.com.dakaizhihu.adapter.MyPagerAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
 
@@ -57,7 +57,9 @@ public class ThemeMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_theme_main,container,false);
-        Log.d("TAG", "222-----------------------OnCreate");
+
+        LogUtils.MyLog("ThemeMainFragment", "onCreate");
+
         initUI();
         initData();
 
@@ -65,6 +67,9 @@ public class ThemeMainFragment extends Fragment {
     }
 
     private void initData() {
+
+        LogUtils.MyLog("ThemeMainFragment", "获取数据");
+
         urlList = URLStringUtils.getGETHOWMANYTHEMES();
         RequestQueue queue= Volley.newRequestQueue(getContext());
         MyStringRequest request=new MyStringRequest(urlList, new Response.Listener<String>() {
@@ -75,7 +80,8 @@ public class ThemeMainFragment extends Fragment {
                 }.getType();
                 listData = gson.fromJson(s, type);
                 datas = listData.getOthers();
-                Log.d("TAG", "222-----------------------加载fragment");
+
+
 
                 fragmentList=new ArrayList<Fragment>();
                 TITLE=new ArrayList<String>();
@@ -133,35 +139,8 @@ public class ThemeMainFragment extends Fragment {
     private void initUI() {
         vpTheme= (ViewPager) view.findViewById(R.id.vp_theme);
         tpiTheme= (TabLayout) view.findViewById(R.id.tpi_theme);
+
+        LogUtils.MyLog("ThemeMainFragment", "初始化UI完毕");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("TAG", "222-----------------------OnStart");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG", "222-----------------------OnPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG", "222-----------------------OnResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG", "222-----------------------OnStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TAG", "222-----------------------OnDestory");
-    }
 }

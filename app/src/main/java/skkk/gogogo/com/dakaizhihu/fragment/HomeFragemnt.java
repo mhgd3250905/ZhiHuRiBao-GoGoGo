@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import skkk.gogogo.com.dakaizhihu.HomeGson.Story;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.HomeAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 
@@ -67,7 +67,9 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("TAG", "homefragment-----------------------OnCtreate");
+
+        LogUtils.MyLog("HomeFragment","onCreate");
+
         view = inflater.inflate(R.layout.fragment_home, container, false);
         mPref = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         initUI();
@@ -79,13 +81,12 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     private void initDB() {
         dbHelper = new MySQLiteHelper(getActivity(), "News.db", null, 1);
     }
-
     /*
     * @desc 获取网络数据
     * @时间 2016/6/22 11:50
     */
     private void initData() {
-        Log.d("TAG", "homefragment-----------------------开始加载数据");
+        LogUtils.MyLog("HomeFragment", "开始加载数据");
         //创建队列
         queue = Volley.newRequestQueue(getActivity());
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
@@ -117,9 +118,9 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
 
 
     /*
-                                * @desc Handler 接收消息做出反应
-                                * @时间 2016/6/22 11:54
-                                */
+     * @desc Handler 接收消息做出反应
+     * @时间 2016/6/22 11:54
+     */
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -129,8 +130,12 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
                 @Override
                 public void onItemClick(View view, int position) {
                     final int id = mData.get(position).getId();
-                    mPref.edit().putInt("news_id", id).commit();
-                    startActivity(new Intent(getActivity(), NewsDetailActivity.class));
+
+                    Intent intent=new Intent();
+                    intent.putExtra("news_id",id);
+                    intent.setClass(getContext(),NewsDetailActivity.class);
+                    startActivity(intent);
+
                 }
 
                 @Override
@@ -148,6 +153,7 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     * @时间 2016/6/21 23:29
     */
     private void initUI() {
+
         /*设置RecyclerView*/
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_home);
         /*创建默认的线性LayoutManager*/
@@ -163,6 +169,7 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
                 initData();
             }
         });
+        LogUtils.MyLog("HomeFragment", "UI创建完毕");
     }
 
     /*生命周期*/
@@ -170,30 +177,31 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     public void onStart() {
         super.onStart();
 
-        Log.d("TAG", "homefragment-----------------------OnStart");
+        LogUtils.MyLog("HomeFragment", "onStart");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("TAG", "homefragment-----------------------OnPause");
+        LogUtils.MyLog("HomeFragment", "onPause");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("TAG", "homefragment-----------------------OnResume");
+        LogUtils.MyLog("HomeFragment", "onResume");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("TAG", "homefragment-----------------------OnStop");
+        LogUtils.MyLog("HomeFragment", "onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("TAG", "homefragment-----------------------OnDestory");
+        LogUtils.MyLog("HomeFragment", "onDestory");
     }
+
 }

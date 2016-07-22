@@ -1,8 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +30,7 @@ import skkk.gogogo.com.dakaizhihu.ThemeGson.ThemeNewsListData;
 import skkk.gogogo.com.dakaizhihu.ThemeGson.ThemeStory;
 import skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity;
 import skkk.gogogo.com.dakaizhihu.adapter.ThemeAdapter;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
@@ -54,7 +53,6 @@ public class ThemeFragment extends Fragment {
     private List<ThemeStory> mData;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private ImageLoader loader;
-    private SharedPreferences mPref;
     private MySQLiteHelper dbHelper;
     private SQLiteDatabase db;
     private ThemeAdapter themeAdapter;
@@ -72,8 +70,11 @@ public class ThemeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        LogUtils.MyLog("ThemeFragment", "onCreate");
+
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        mPref = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
+
         initUI();
         initData();
         initDB();
@@ -82,6 +83,9 @@ public class ThemeFragment extends Fragment {
 
     @Override
     public void onStop() {
+
+        LogUtils.MyLog("ThemeFragment", "onStop");
+
         super.onStop();
     }
 
@@ -94,6 +98,8 @@ public class ThemeFragment extends Fragment {
     * @时间 2016/6/22 11:50
     */
     private void initData() {
+
+        LogUtils.MyLog("ThemeFragment", "获取数据");
 
         //创建队列
         queue = Volley.newRequestQueue(getActivity());
@@ -133,9 +139,9 @@ public class ThemeFragment extends Fragment {
 
 
     /*
-                                * @desc Handler 接收消息做出反应
-                                * @时间 2016/6/22 11:54
-                                */
+     * @desc Handler 接收消息做出反应
+     * @时间 2016/6/22 11:54
+     */
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -145,8 +151,11 @@ public class ThemeFragment extends Fragment {
                 @Override
                 public void onItemClick(View view, int position) {
                     final int id = mData.get(position).getId();
-                    mPref.edit().putInt("news_id", id).commit();
-                    startActivity(new Intent(getActivity(), NewsDetailActivity.class));
+
+                    Intent intent=new Intent();
+                    intent.putExtra("news_id",id);
+                    intent.setClass(getContext(), NewsDetailActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override
@@ -180,6 +189,7 @@ public class ThemeFragment extends Fragment {
             }
         });
 
+        LogUtils.MyLog("ThemeFragment", "UI加载完毕");
 
     }
 }

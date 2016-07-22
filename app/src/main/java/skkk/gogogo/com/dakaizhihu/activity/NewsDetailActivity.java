@@ -2,7 +2,6 @@ package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,6 +41,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 import skkk.gogogo.com.dakaizhihu.utils.MyStringRequest;
 import skkk.gogogo.com.dakaizhihu.utils.URLStringUtils;
@@ -53,7 +52,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     @ViewInject(R.id.NSV_details)
     NestedScrollView nsvDetails;
     SharedPreferences mPref;
-    private int newsId;
+
     private NewDetailsData newsDetailsData;
     private WebView mWebView;
     private String newsHtmlContent;
@@ -68,12 +67,15 @@ public class NewsDetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private String shareURL;
     private AlertDialog alertDialog;
+    private int newsId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getDataFromIntent();
         initUI();
         initDB();
+
         if (checkStorage()){
             //getSupportActionBar().setDisplayShowTitleEnabled(false);
             mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
@@ -82,13 +84,21 @@ public class NewsDetailActivity extends AppCompatActivity {
             }catch (Exception e){
                 ivNewsTitle.setVisibility(View.GONE);
             }
-            Log.d("TAG","--------------------------"+newsTitle);
-            Toast.makeText(NewsDetailActivity.this, "来自SQL", Toast.LENGTH_SHORT).show();
+
+            LogUtils.MyLog("文章详情", "判断data来自DB");
+
         }else {
+
+            LogUtils.MyLog("文章详情","尝试从网络获取");
             initData();
         }
     }
 
+    private void getDataFromIntent() {
+        //获取穿过来的的news_id信息
+        Intent intent=getIntent();
+        newsId = intent.getIntExtra("news_id", 0);
+    }
 
 
     /*
@@ -98,8 +108,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         */
     private boolean checkStorage() {
         //从SP中获取newsId
-        mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
-        newsId = mPref.getInt("news_id", 0);
+//        mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
+//        newsId = mPref.getInt("news_id", 0);
 
         //获取一个可以写的数据库db
         db=dbHelper.getWritableDatabase();
@@ -136,6 +146,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+
         setContentView(R.layout.activity_news_detail);
         ViewUtils.inject(this);
 
@@ -182,7 +193,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);//设置收缩之后的字体颜色
         collapsingToolbar.setExpandedTitleGravity(Gravity.BOTTOM | Gravity.RIGHT);//设置未收缩时候的标题位置
 
-
+        LogUtils.MyLog("文章详情", "UI初始化完毕");
     }
     /*
     * @desc 创建点击菜单
@@ -221,6 +232,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     * @时间 2016/7/2 22:54
     */
     private void initData() {
+
         //volley通过网络获取字符串信息
 
         //获取url
@@ -231,6 +243,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         MyStringRequest request = new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+
+                LogUtils.MyLog("文章详情","连接网络并获取到数据");
+
                 //获取到数据之后通过Gson来将json转化为可用的javaBean
                 Gson gson = new Gson();
                 java.lang.reflect.Type type = new TypeToken<NewDetailsData>() {
@@ -245,6 +260,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 //获取分享url
                 shareURL = newsDetailsData.getShare_url();
 
+
+                LogUtils.MyLog("文章详情","开始解析html文本");
 
                 doc_dis = null;
                 //这里通过Jsoup来获取html文本文件中的dom然后进行对应的修改
@@ -287,6 +304,8 @@ public class NewsDetailActivity extends AppCompatActivity {
 
                 //这里开始将我们前面从网络获取的data装入数据库
                 ContentValues values = new ContentValues();
+
+                LogUtils.MyLog("文章详情","将网络获取之data保存至DB");
 
                 //开始组装第一条数据
                 values.put("image_uri", titleImage);
@@ -337,4 +356,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             db.close();
         }
     }
+
+
 }
