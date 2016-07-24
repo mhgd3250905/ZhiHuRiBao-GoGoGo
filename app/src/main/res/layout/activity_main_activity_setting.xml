@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:itheima="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -33,6 +34,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -42,7 +44,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:padding="10dp"
                 android:text="清除缓存"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18dp" />
@@ -55,16 +56,33 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:padding="10dp"
                 android:text="0M"
                 android:textColor="#77000000"
                 android:textSize="15dp" />
         </LinearLayout>
+
         <ImageView
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
             android:background="#aa607d8b"/>
+
+        <skkk.gogogo.com.dakaizhihu.View.SettingItemView
+            android:id="@id/siv_setting_image_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            itheima:titleText="无图模式"
+            itheima:desc_on="无图模式已开启"
+            itheima:desc_off="无图模式已关闭"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#aa607d8b"/>
+
     </LinearLayout>
+
+
+
 
 </LinearLayout>

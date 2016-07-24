@@ -1,6 +1,7 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -15,6 +17,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import java.io.File;
 
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.View.SettingItemView;
 import skkk.gogogo.com.dakaizhihu.utils.GetFileSize;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
 
@@ -27,16 +30,27 @@ public class SettingActivity extends AppCompatActivity {
     private Toolbar tbSetting;
     private ProgressDialog pd;
     private GetFileSize getFileSize;
+    private SharedPreferences mPref;
     private long l;
+    private SettingItemView sivImageMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //开始加载UI之前处理所有的动作
+        beforeStart();
         initUI();
         initDB();
         initData();
     }
 
+    /*
+    * @desc 开始加载UI之前处理所有的动作
+    * @时间 2016/7/24 11:32
+    */
+    private void beforeStart() {
+        mPref=getSharedPreferences("config",MODE_PRIVATE);
+    }
 
 
     private void initUI() {
@@ -53,10 +67,35 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-        tbSetting.setNavigationOnClickListener(new View.OnClickListener() {
+        /*
+        * @desc 设置无图模式
+        * @时间 2016/7/24 12:57
+        */
+        sivImageMode= (SettingItemView) findViewById(R.id.siv_setting_image_mode);
+        boolean autoUpdate=mPref.getBoolean("image_mode",false);
+
+        if(autoUpdate){
+            sivImageMode.setChecked(true);
+        }else{
+            sivImageMode.setChecked(false);
+        }
+
+        sivImageMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                //判断当前勾选状态
+                if (sivImageMode.isChecked()) {
+                    //设置不勾选
+                    sivImageMode.setChecked(false);
+                    //更新SP
+                    mPref.edit().putBoolean("image_mode", false).commit();
+                    Toast.makeText(SettingActivity.this, "已关闭无图模式", Toast.LENGTH_SHORT).show();
+                } else {
+                    sivImageMode.setChecked(true);
+                    //更新SP
+                    mPref.edit().putBoolean("image_mode", true).commit();
+                    Toast.makeText(SettingActivity.this, "已开启无图模式", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

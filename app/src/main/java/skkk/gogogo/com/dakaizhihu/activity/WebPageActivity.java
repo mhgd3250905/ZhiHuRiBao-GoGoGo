@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -13,6 +15,8 @@ import android.webkit.WebViewClient;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.R;
 
 public class WebPageActivity extends AppCompatActivity {
@@ -27,7 +31,6 @@ public class WebPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initUI();
         initData();
-
     }
 
 
@@ -75,5 +78,34 @@ public class WebPageActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /*
+  * @desc 创建点击菜单
+  * @时间 2016/6/21 23:06
+  */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+    /*
+   * @desc toolbar菜单
+   * @时间 2016/6/21 23:06
+   */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            ShareSDK.initSDK(this);
+            OnekeyShare oks = new OnekeyShare();
+            oks.setText("~~~~~~分享自大开知乎~~~~~"+"\n"+url);
+            oks.show(WebPageActivity.this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

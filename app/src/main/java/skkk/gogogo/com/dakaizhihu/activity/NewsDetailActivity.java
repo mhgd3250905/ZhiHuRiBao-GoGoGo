@@ -1,6 +1,5 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,13 +65,14 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String url;
     private Toolbar toolbar;
     private String shareURL;
-    private AlertDialog alertDialog;
     private int newsId;
+    private Boolean imageMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDataFromIntent();
+        //处理加载UI之前需要的各种动作
+        beforeStart();
         initUI();
         initDB();
 
@@ -94,10 +94,13 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void getDataFromIntent() {
+    private void beforeStart() {
         //获取穿过来的的news_id信息
         Intent intent=getIntent();
         newsId = intent.getIntExtra("news_id", 0);
+        //获取是否为无图模式
+        mPref=getSharedPreferences("config", MODE_PRIVATE);
+
     }
 
 
@@ -107,9 +110,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         * 如果有缓存那么就返回true 否则返回false
         */
     private boolean checkStorage() {
-        //从SP中获取newsId
-//        mPref = getSharedPreferences("config", Context.MODE_PRIVATE);
-//        newsId = mPref.getInt("news_id", 0);
+
 
         //获取一个可以写的数据库db
         db=dbHelper.getWritableDatabase();
@@ -151,10 +152,24 @@ public class NewsDetailActivity extends AppCompatActivity {
         ViewUtils.inject(this);
 
         //webview初始化设置
+
+
+
         mWebView = (WebView) findViewById(R.id.wv_news_details);
         WebSettings webSetting = mWebView.getSettings();//获取webview的设置
         webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
         webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
+        //无图模式
+        //imageMode是true则证明为希望是无图模式
+        //false则证明为非无图模式
+        imageMode = mPref.getBoolean("image_mode",false);
+        if (imageMode){
+            webSetting.setBlockNetworkImage(true);
+        }else {
+            webSetting.setBlockNetworkImage(false);
+        }
+
+
 
         // WebViewClient用来处理WebView各种通知、请求事件等,重写里面的方法即可
         mWebView.setWebViewClient(new WebViewClient() {
@@ -217,7 +232,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
             oks.setText(newsTitle+"\n"+"~~~~~~分享自大开知乎~~~~~"+"\n"+shareURL);
-            oks.setImagePath(getFilesDir()+"/aaa.png");
             oks.show(NewsDetailActivity.this);
             return true;
         }

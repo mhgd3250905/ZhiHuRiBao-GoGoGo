@@ -27,14 +27,14 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
+    <skkk.gogogo.com.dakaizhihu.View.MyNestScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <WebView
             android:id="@id/wv_web_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></WebView>
-    </android.support.v4.widget.NestedScrollView>
+    </skkk.gogogo.com.dakaizhihu.View.MyNestScrollView>
 
 
 </LinearLayout>
