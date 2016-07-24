@@ -114,10 +114,8 @@ public class HomeActivity extends AppCompatActivity
                     .replace(R.id.fl_home, columnMainFragment).commit();
         }else if (id == R.id.nav_setting) {
             startActivity(new Intent(HomeActivity.this,SettingActivity.class));
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }else if (id == R.id.nav_send) {
+            startActivity(new Intent());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

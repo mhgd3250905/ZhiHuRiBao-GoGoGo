@@ -1,6 +1,8 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
+import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,8 +50,15 @@ public class WebPageActivity extends AppCompatActivity {
         });
 
         WebSettings webSetting = wvWebPage.getSettings();//获取webview的设置
-        webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
-        webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
+        setSettings(webSetting);
+
+        wvWebPage.setWebViewClient(new WebViewClient() {
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                //handler.cancel(); // Android默认的处理方式
+                handler.proceed();  // 接受所有网站的证书
+                //handleMessage(Message msg); // 进行其他处理
+            }
+        });
 
 
         //设置activity中大开的网页使用本webview打开
@@ -61,9 +71,27 @@ public class WebPageActivity extends AppCompatActivity {
         });
     }
 
+    //设置websetting
+    private void setSettings(WebSettings setting) {
+        setting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
+        setting.setJavaScriptEnabled(true);
+        setting.setBuiltInZoomControls(true);
+        setting.setDisplayZoomControls(false);
+        setting.setSupportZoom(true);
+        setting.setDomStorageEnabled(true);
+        setting.setDatabaseEnabled(true);
+        // 全屏显示
+        setting.setLoadWithOverviewMode(true);
+        setting.setUseWideViewPort(true);
+        setting.setCacheMode(WebSettings.LOAD_DEFAULT);
+        if (Build.VERSION.SDK_INT >= 21) {
+            setting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+    }
+
     private void initData() {
         //获得从上一个Activity传来的intent对象
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         url = intent.getStringExtra("url");
         wvWebPage.loadUrl(url);
     }
@@ -101,7 +129,7 @@ public class WebPageActivity extends AppCompatActivity {
         if (id == R.id.action_share) {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
-            oks.setText("~~~~~~分享自大开知乎~~~~~"+"\n"+url);
+            oks.setText("~~~~~~分享自大开知乎~~~~~" + "\n" + url);
             oks.show(WebPageActivity.this);
             return true;
         }

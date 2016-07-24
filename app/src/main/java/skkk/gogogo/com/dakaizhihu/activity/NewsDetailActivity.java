@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -115,7 +116,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         //获取一个可以写的数据库db
         db=dbHelper.getWritableDatabase();
         //获取一个游标并且对db中所有的条目进行检索
-        Cursor cursor = db.query("News",null,null,null,null,null,null);
+        Cursor cursor = db.query("News", null, null, null, null, null, null);
         while (cursor.moveToNext()){
             //如果db中找到对应的newsId，则获取出相应的信息
             if(String.valueOf(newsId).equals(cursor.getString(4))){
@@ -157,8 +158,9 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         mWebView = (WebView) findViewById(R.id.wv_news_details);
         WebSettings webSetting = mWebView.getSettings();//获取webview的设置
-        webSetting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
-        webSetting.setJavaScriptEnabled(true);//使用网页中的一些JS交互
+        setSettings(webSetting);
+
+
         //无图模式
         //imageMode是true则证明为希望是无图模式
         //false则证明为非无图模式
@@ -210,6 +212,28 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         LogUtils.MyLog("文章详情", "UI初始化完毕");
     }
+
+    /*
+    * @desc web设置
+    * @时间 2016/7/24 22:52
+    */
+    private void setSettings(WebSettings setting) {
+        setting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
+        setting.setJavaScriptEnabled(true);
+        setting.setBuiltInZoomControls(true);
+        setting.setDisplayZoomControls(false);
+        setting.setSupportZoom(true);
+        setting.setDomStorageEnabled(true);
+        setting.setDatabaseEnabled(true);
+        // 全屏显示
+        //setting.setLoadWithOverviewMode(true);
+        //setting.setUseWideViewPort(true);
+        setting.setCacheMode(WebSettings.LOAD_DEFAULT);
+        if (Build.VERSION.SDK_INT >= 21) {
+            setting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+    }
+
     /*
     * @desc 创建点击菜单
     * @时间 2016/6/21 23:06
