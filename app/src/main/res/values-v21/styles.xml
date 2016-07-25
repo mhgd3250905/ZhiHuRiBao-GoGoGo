@@ -1,6 +1,10 @@
 <resources>>
 
     <style name="AppTheme.NoActionBar">
+        <!-- 溢出菜单图标颜色-->
+        <item name="colorControlNormal">@color/white</item>
+        <!-- 左边箭头 -->
+        <!--<item name="drawerArrowStyle">@color/white</item>-->
         <!--透明状态栏-->
         <item name="android:windowTranslucentStatus">true</item>
         <!--透明导航栏-->

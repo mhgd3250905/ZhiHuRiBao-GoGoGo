@@ -9,4 +9,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Str_home_card_title_content">这里显示标题</string>
+    <string name="abour_app">本App使用的所有API均由知乎Zhihu.Inc提供,Github用户mhgd3250905采取非正常手段获取.获取与共享之行为或有侵犯知乎权益的嫌疑.若被告知需停止共享与使用,mhgd3250905会及时删除页面与整个项目.请您了解相关情况,并遵守知乎协议,谢谢!</string>
 </resources>

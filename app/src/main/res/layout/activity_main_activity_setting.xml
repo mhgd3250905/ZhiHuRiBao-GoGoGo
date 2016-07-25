@@ -21,9 +21,7 @@
             android:background="@color/colorPrimaryDark"
             app:subtitleTextAppearance="@style/ToolbarTextAppearanceSubTitle"
             app:titleTextAppearance="@style/ToolbarTextAppearanceTitle"
-            app:subtitleTextColor="@color/white"
             app:title="大开知乎"
-            app:subtitle="世界这么大，总有你想要的"
             app:titleTextColor="@color/white" />
     </android.support.design.widget.AppBarLayout>
 

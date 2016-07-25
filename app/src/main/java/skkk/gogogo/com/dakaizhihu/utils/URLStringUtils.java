@@ -35,6 +35,7 @@ public class URLStringUtils {
     //看知乎 跳转到知乎问答页面
     private static String KANZHIHUQUESTIONANDANSWER="https://www.zhihu.com/";
 
+
     public static String getKANZHIHUQUESTIONANDANSWER(String quesetionId,String answeId) {
         return KANZHIHUQUESTIONANDANSWER+"question/"+quesetionId+"/answer/"+answeId;
     }

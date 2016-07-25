@@ -32,6 +32,10 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="关于作者" />
+            <item
+                android:id="@+id/nav_app"
+                android:icon="@drawable/menu_about_app"
+                android:title="应用声明" />
         </menu>
     </item>
 

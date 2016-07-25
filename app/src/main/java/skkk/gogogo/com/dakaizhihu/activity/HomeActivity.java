@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
@@ -115,7 +117,14 @@ public class HomeActivity extends AppCompatActivity
         }else if (id == R.id.nav_setting) {
             startActivity(new Intent(HomeActivity.this,SettingActivity.class));
         }else if (id == R.id.nav_send) {
-            startActivity(new Intent());
+            startActivity(new Intent(this,AboutMeActivity.class));
+        }else if (id == R.id.nav_app) {
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setTitle("版权信息");
+            View view=View.inflate(this,R.layout.view_about_app,null);
+            builder.setView(view);
+            builder.setNegativeButton("知道了",null);
+            builder.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -63,7 +63,9 @@
         <activity
             android:name=".activity.WebPageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.AboutMeActivity"></activity>
+        <activity
+            android:name=".activity.AboutMeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

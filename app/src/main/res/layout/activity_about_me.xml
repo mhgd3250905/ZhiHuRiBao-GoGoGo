@@ -1,60 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="skkk.gogogo.com.dakaizhihu.activity.AboutMeActivity">
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="大开知乎"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.AppBarLayout
+            android:fitsSystemWindows="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view">
+            <android.support.v7.widget.Toolbar
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:id="@id/tb_about_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                app:subtitleTextAppearance="@style/ToolbarTextAppearanceSubTitle"
+                app:titleTextAppearance="@style/ToolbarTextAppearanceTitle"
+                app:subtitleTextColor="@color/white"
+                app:title="大开知乎"
+                app:titleTextColor="@color/white" />
+        </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="作者：S大开"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20dp"
-        android:paddingLeft="10dp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="简介：一个BBoy"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20dp"
-        android:paddingLeft="10dp"
-        />
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            fresco:roundAsCircle="true"
+            fresco:backgroundImage="@drawable/author"
+            fresco:roundedCornerRadius="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            />
 
-    <ImageView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="#607d8b"/>
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="如果你觉得用的还不错，可以鼓励一下大开，嘿！"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20dp"
-        android:paddingLeft="10dp"
-        />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="支付宝账号：13671646071"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20dp"
-        android:paddingLeft="10dp"
-        />
-</LinearLayout>
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="作者：S大开"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            android:paddingLeft="10dp"
+            />
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="简介：一个BBoy"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            android:paddingLeft="10dp"
+            />
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="https://github.com/mhgd3250905"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:paddingLeft="10dp"
+            />
+
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#607d8b"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我清晨乘坐上海拥挤的地铁去上班\n下班回到宿舍已经是黑夜\n抽出空来学习并制作了大开知乎\n如果碰巧你觉得还不错\n我不介意告诉你我的支付宝"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            android:paddingLeft="10dp"
+            />
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:src="@drawable/alipay_logo"/>
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="支付宝账号：13671646071"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            android:paddingLeft="10dp"
+            />
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
