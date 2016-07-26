@@ -145,6 +145,7 @@ public class SettingActivity extends AppCompatActivity {
                     public void run() {
                         mPaperShredderView.stopAnim();
                         clearDailog.dismiss();
+                        tvSettingSize.setText("0K");
                     }
                 });
 

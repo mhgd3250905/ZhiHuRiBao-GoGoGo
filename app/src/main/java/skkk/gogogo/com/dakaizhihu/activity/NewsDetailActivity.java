@@ -175,7 +175,8 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         // WebViewClient用来处理WebView各种通知、请求事件等,重写里面的方法即可
         mWebView.setWebViewClient(new WebViewClient() {
-            // 点击页面中的链接会调用这个方法
+
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 // TODO Auto-generated method stub
@@ -395,5 +396,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebView.destroy();
+    }
 }

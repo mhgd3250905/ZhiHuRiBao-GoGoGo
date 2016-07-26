@@ -1,8 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -52,13 +49,17 @@ public class WebPageActivity extends AppCompatActivity {
         WebSettings webSetting = wvWebPage.getSettings();//获取webview的设置
         setSettings(webSetting);
 
-        wvWebPage.setWebViewClient(new WebViewClient() {
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                //handler.cancel(); // Android默认的处理方式
-                handler.proceed();  // 接受所有网站的证书
-                //handleMessage(Message msg); // 进行其他处理
-            }
-        });
+        webSetting.setBlockNetworkImage(true);
+
+
+
+//        wvWebPage.setWebViewClient(new WebViewClient() {
+//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//                //handler.cancel(); // Android默认的处理方式
+//                handler.proceed();  // 接受所有网站的证书
+//                //handleMessage(Message msg); // 进行其他处理
+//            }
+//        });
 
 
         //设置activity中大开的网页使用本webview打开
@@ -84,9 +85,6 @@ public class WebPageActivity extends AppCompatActivity {
         setting.setLoadWithOverviewMode(true);
         setting.setUseWideViewPort(true);
         setting.setCacheMode(WebSettings.LOAD_DEFAULT);
-        if (Build.VERSION.SDK_INT >= 21) {
-            setting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
     }
 
     private void initData() {
