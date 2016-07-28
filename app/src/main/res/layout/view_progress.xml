@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <skkk.gogogo.com.dakaizhihu.View.HorizortalProgressbarWithProgress
+        android:id="@id/my_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        android:padding="5dp"
+        android:layout_marginTop="30dp"
+        hy:process_text_color="@color/colorPrimaryDark"
+        hy:process_reach_color="@color/colorAccent"
+        hy:process_reach_height="6dp"
+        hy:process_unreach_color="@color/colorAccent"
+        />
+</LinearLayout>

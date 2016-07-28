@@ -35,4 +35,5 @@
     <item name="siv_setting_sqplash_show" type="id">siv_setting_sqplash_show</item>
     <item name="liv_kanzhihu" type="id">liv_kanzhihu</item>
     <item name="tb_about_me" type="id">tb_about_me</item>
+    <item name="my_progress" type="id">my_progress</item>
 </resources>

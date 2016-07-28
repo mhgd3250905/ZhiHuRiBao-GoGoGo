@@ -1,10 +1,8 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,13 +11,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ldoublem.PaperShredderlib.PaperShredderView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.io.File;
 
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.View.HorizortalProgressbarWithProgress;
 import skkk.gogogo.com.dakaizhihu.View.SettingItemView;
 import skkk.gogogo.com.dakaizhihu.utils.GetFileSize;
 import skkk.gogogo.com.dakaizhihu.utils.MySQLiteHelper;
@@ -31,13 +29,12 @@ public class SettingActivity extends AppCompatActivity {
     private MySQLiteHelper helper;
     private SQLiteDatabase db;
     private Toolbar tbSetting;
-    private ProgressDialog pd;
     private GetFileSize getFileSize;
     private SharedPreferences mPref;
     private long l;
     private SettingItemView sivImageMode;
-    private PaperShredderView mPaperShredderView;
     private AlertDialog clearDailog;
+    private HorizortalProgressbarWithProgress progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,79 +107,45 @@ public class SettingActivity extends AppCompatActivity {
         helper = new MySQLiteHelper(this, "News.db", null, 1);
     }
 
+
+
+
+
     public void clearSQL(View view){
 
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        View view_2=View.inflate(this,R.layout.view_suizhiji,null);
+        builder.setTitle("提示");
+        builder.setMessage("正在清理缓存...");
+        View view_2=View.inflate(this,R.layout.view_progress,null);
+        progress = (HorizortalProgressbarWithProgress) view_2.findViewById(R.id.my_progress);
 
-        mPaperShredderView = (PaperShredderView) view_2.findViewById(R.id.ps_delete2);
-        mPaperShredderView.setShrededType(PaperShredderView.SHREDEDTYPE.Piece);//纸片效果和纸条效果
-        mPaperShredderView.setSherderProgress(false);
-        mPaperShredderView.setTitle("清除数据");
-        mPaperShredderView.setTextColor(Color.WHITE);
-        mPaperShredderView.setPaperColor(Color.WHITE);
-        mPaperShredderView.setBgColor(getResources().getColor(R.color.colorAccent));
-        mPaperShredderView.setTextShadow(true);
-        mPaperShredderView.setPaperEnterColor(Color.BLACK);
-        mPaperShredderView.startAnim(3000);
         //删除数据库数据
         db=helper.getWritableDatabase();
         db.delete("News", null, null);
-        //延迟三秒关闭动画
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                db=helper.getWritableDatabase();
-                db.delete("News", null, null);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPaperShredderView.stopAnim();
-                        clearDailog.dismiss();
-                        tvSettingSize.setText("0K");
-                    }
-                });
-
-            }
-        }).start();
         builder.setView(view_2);
+        new Thread(new Runnable() {
+             @Override
+             public void run() {
+                 db.delete("News", null, null);
+                 for (int i=1;i<=100;i++){
+                     try {
+                         Thread.sleep(50);
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+                     }
+                     progress.setProgress(i);//设置进度
+                 }
+                 clearDailog.dismiss();
+                 runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         tvSettingSize.setText("0K");
+                     }
+                 });
+             }
+         }).start();
         clearDailog=builder.show();
 
-//        pd = new ProgressDialog(SettingActivity.this);
-//        pd.setTitle("提示");
-//        pd.setMessage("正在清理...");
-//        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//        pd.setProgressNumberFormat("");
-//        pd.show();
-//        pd.setMax(100);//设置最大值
-//        db=helper.getWritableDatabase();
-//         new Thread(new Runnable() {
-//             @Override
-//             public void run() {
-//                 db.delete("News", null, null);
-//                 for (int i=1;i<101;i++){
-//                     try {
-//                         Thread.sleep(30);
-//                     } catch (InterruptedException e) {
-//                         e.printStackTrace();
-//                     }
-//                     pd.setProgress(i);//设置进度
-//                 }
-//                 pd.dismiss();//关闭进度条
-//                 runOnUiThread(new Runnable() {
-//                     @Override
-//                     public void run() {
-//                         tvSettingSize.setText("0K");
-//                     }
-//                 });
-//             }
-//         }).start();
     }
 
     private void initData() {

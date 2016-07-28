@@ -5,4 +5,46 @@
         <attr name="desc_on" format="string"/>
         <attr name="desc_off" format="string"/>
     </declare-styleable>
+
+        <!-- 左边进度颜色和高度-->
+        <attr name="process_unreach_color" format="color"></attr>
+        <attr name="process_unreach_hight" format="dimension"></attr>
+        <!-- 右边进度颜色和高度-->
+        <attr name="process_reach_color" format="color"></attr>
+        <attr name="process_reach_height" format="dimension"></attr>
+        <!-- 文字颜色、大小、偏移-->
+        <attr name="process_text_color" format="color"></attr>
+        <attr name="process_text_size" format="dimension"></attr>
+        <attr name="process_text_offset" format="dimension"></attr>
+
+        <declare-styleable name="HorizortalProgressbarWithProgress">
+
+            <!-- 左边进度颜色和高度-->
+            <attr name="process_unreach_color"></attr>
+            <attr name="process_unreach_hight"></attr>
+            <!-- 右边进度颜色和高度-->
+            <attr name="process_reach_color"></attr>
+            <attr name="process_reach_height"></attr>
+            <!-- 文字颜色、大小、偏移-->
+            <attr name="process_text_color"></attr>
+            <attr name="process_text_size"></attr>
+            <attr name="process_text_offset"></attr>
+
+        </declare-styleable>
+
+    <declare-styleable name="HorizortalProgressbarWithProgress_image">
+
+        <!-- 左边进度颜色和高度-->
+        <attr name="process_unreach_color"></attr>
+        <attr name="process_unreach_hight"></attr>
+        <!-- 右边进度颜色和高度-->
+        <attr name="process_reach_color"></attr>
+        <attr name="process_reach_height"></attr>
+        <!-- 文字颜色、大小、偏移-->
+        <attr name="process_text_color"></attr>
+        <attr name="process_text_size"></attr>
+        <attr name="process_text_offset"></attr>
+
+    </declare-styleable>
+
 </resources>

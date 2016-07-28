@@ -1,1 +1,1 @@
-include ':app', ':papershredderlib'
+include ':app'

@@ -53,15 +53,6 @@ public class WebPageActivity extends AppCompatActivity {
 
 
 
-//        wvWebPage.setWebViewClient(new WebViewClient() {
-//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-//                //handler.cancel(); // Android默认的处理方式
-//                handler.proceed();  // 接受所有网站的证书
-//                //handleMessage(Message msg); // 进行其他处理
-//            }
-//        });
-
-
         //设置activity中大开的网页使用本webview打开
         wvWebPage.setWebViewClient(new WebViewClient() {
             @Override
@@ -133,5 +124,11 @@ public class WebPageActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wvWebPage.destroy();
     }
 }
