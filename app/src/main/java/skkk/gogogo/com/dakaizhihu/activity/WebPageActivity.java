@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,9 @@ public class WebPageActivity extends AppCompatActivity {
     @ViewInject(R.id.wv_web_page)
     WebView wvWebPage;
     private String url;
+    private String desc;
+    private String imageUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,6 @@ public class WebPageActivity extends AppCompatActivity {
         setSettings(webSetting);
 
         webSetting.setBlockNetworkImage(true);
-
 
 
         //设置activity中大开的网页使用本webview打开
@@ -82,6 +85,8 @@ public class WebPageActivity extends AppCompatActivity {
         //获得从上一个Activity传来的intent对象
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
+        desc=intent.getStringExtra("desc");
+        imageUrl=intent.getStringExtra("image");
         wvWebPage.loadUrl(url);
     }
 
@@ -118,7 +123,15 @@ public class WebPageActivity extends AppCompatActivity {
         if (id == R.id.action_share) {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
-            oks.setText("~~~~~~分享自大开知乎~~~~~" + "\n" + url);
+            oks.setTitle(desc);
+            oks.setText(desc);
+            oks.setUrl(url);
+
+            if(!TextUtils.isEmpty(imageUrl)){
+                oks.setImageUrl(imageUrl);
+            }else{
+                oks.setImageUrl(getResources().getString(R.string.image_default));
+            }
             oks.show(WebPageActivity.this);
             return true;
         }

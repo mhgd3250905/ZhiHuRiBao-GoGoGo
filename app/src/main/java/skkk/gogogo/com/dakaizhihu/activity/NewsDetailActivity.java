@@ -13,6 +13,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -68,6 +69,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String shareURL;
     private int newsId;
     private Boolean imageMode;
+    private String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         if (checkStorage()){
             //getSupportActionBar().setDisplayShowTitleEnabled(false);
+            collapsingToolbar.setTitle(newsTitle);
             mWebView.loadDataWithBaseURL("", newsHtmlContent, "text/html", "utf-8", "");
             try {
                 ivNewsTitle.setImageURI(Uri.parse(titleImage));
@@ -99,6 +102,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         //获取穿过来的的news_id信息
         Intent intent=getIntent();
         newsId = intent.getIntExtra("news_id", 0);
+        imageUrl=intent.getStringExtra("image");
         //获取是否为无图模式
         mPref=getSharedPreferences("config", MODE_PRIVATE);
 
@@ -111,7 +115,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         * 如果有缓存那么就返回true 否则返回false
         */
     private boolean checkStorage() {
-
 
         //获取一个可以写的数据库db
         db=dbHelper.getWritableDatabase();
@@ -175,8 +178,6 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         // WebViewClient用来处理WebView各种通知、请求事件等,重写里面的方法即可
         mWebView.setWebViewClient(new WebViewClient() {
-
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 // TODO Auto-generated method stub
@@ -256,7 +257,18 @@ public class NewsDetailActivity extends AppCompatActivity {
         if (id == R.id.action_share) {
             ShareSDK.initSDK(this);
             OnekeyShare oks = new OnekeyShare();
-            oks.setText(newsTitle+"\n"+"~~~~~~分享自大开知乎~~~~~"+"\n"+shareURL);
+            oks.setTitle(newsTitle);
+            oks.setText(newsTitle);
+            oks.setUrl(shareURL);
+
+            if(!TextUtils.isEmpty(titleImage)){
+                oks.setImageUrl(titleImage);
+            }else if(!TextUtils.isEmpty(imageUrl)){
+                oks.setImageUrl(imageUrl);
+            }else{
+                oks.setImageUrl(getResources().getString(R.string.image_default));
+            }
+
             oks.show(NewsDetailActivity.this);
             return true;
         }
@@ -321,7 +333,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Elements ele_Div=doc_dis.getElementsByTag("div");
                 if (ele_Div.size() != 0) {
                     for (Element e_div : ele_Div) {
-                        e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:17px");
+                        //e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:13px");
                         if (e_div.className().equals("main-wrap content-wrap")) {
                             e_div.attr("style", "margin:7");
                         }else if(e_div.className().equals("view-more")){
@@ -335,7 +347,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Elements ele_herf=doc_dis.getElementsByTag("a");
                 if (ele_herf.size() != 0) {
                     for (Element e_herf : ele_herf) {
-                            e_herf.attr("style","font-family:宋体;color:#607d8b");
+                            e_herf.attr("style","font-family:微软雅黑;color:#607d8b");
                     }
                 }
                 //获得webView加载需要的html文本

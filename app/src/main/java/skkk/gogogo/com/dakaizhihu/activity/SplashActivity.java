@@ -107,7 +107,6 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("TAG", "----------------------开启网络获取图片");
             ivSplash.setImageResource(R.drawable.splash_default_image);
             saveSplashPng();
-
             handler.sendEmptyMessageDelayed(0,2500);
         }
     }
@@ -147,7 +146,7 @@ public class SplashActivity extends AppCompatActivity {
                             });
                             queue.add(imageRequest);
                         }else{
-                            Log.d("TAG", "----------------------本地与网络一直");
+                            Log.d("TAG", "----------------------本地图片标签与网络图片标签一致");
                         }
                     }
                 }, new Response.ErrorListener() {

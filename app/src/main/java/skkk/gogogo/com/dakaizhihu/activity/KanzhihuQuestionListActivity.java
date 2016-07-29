@@ -114,6 +114,8 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
                     Log.d("TAG","answerId--------------------------------"+answerId);
                     Intent intent = new Intent();
                     intent.putExtra("url",URLStringUtils.getKANZHIHUQUESTIONANDANSWER(questionId,answerId));
+                    intent.putExtra("desc",mData.get(position).getTitle());
+                    intent.putExtra("image",mData.get(position).getAvatar());
                     intent.setClass(KanzhihuQuestionListActivity.this, WebPageActivity.class);
                     startActivity(intent);
                 }

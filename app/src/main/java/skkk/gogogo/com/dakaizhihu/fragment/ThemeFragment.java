@@ -59,6 +59,7 @@ public class ThemeFragment extends Fragment {
     private RequestQueue queue;
     private int THEMEID;
 
+
     public ThemeFragment(int THEMEID) {
         this.THEMEID = THEMEID;
     }
@@ -154,6 +155,7 @@ public class ThemeFragment extends Fragment {
 
                     Intent intent=new Intent();
                     intent.putExtra("news_id",id);
+                    intent.putExtra("image",mData.get(position).getImages().get(0));
                     intent.setClass(getContext(), NewsDetailActivity.class);
                     startActivity(intent);
                 }

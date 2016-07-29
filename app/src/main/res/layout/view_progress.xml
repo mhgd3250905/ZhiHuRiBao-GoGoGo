@@ -11,9 +11,11 @@
         android:progress="0"
         android:padding="5dp"
         android:layout_marginTop="30dp"
-        hy:process_text_color="@color/colorPrimaryDark"
-        hy:process_reach_color="@color/colorAccent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        hy:process_text_color="@color/colorAccent"
+        hy:process_reach_color="@color/colorPrimaryDark"
         hy:process_reach_height="6dp"
-        hy:process_unreach_color="@color/colorAccent"
+        hy:process_unreach_color="@color/light_colorPrimaryDark"
         />
 </LinearLayout>
