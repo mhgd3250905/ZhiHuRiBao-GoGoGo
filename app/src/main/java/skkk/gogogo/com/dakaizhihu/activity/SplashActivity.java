@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -38,6 +39,7 @@ public class SplashActivity extends AppCompatActivity {
     private RequestQueue queue;
     private StringRequest request;
     private BitmapUtils bitmapUtils;
+    private boolean isNight;
 
 
     /*
@@ -48,11 +50,29 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
-        mPref = getSharedPreferences("config", MODE_PRIVATE);
+        beforeStart();
         bitmapUtils=new BitmapUtils(SplashActivity.this);
         initUI();
         initData();
     }
+
+    /*
+  * @desc 开始加载UI之前处理所有的动作
+  * @时间 2016/7/24 11:32
+  */
+    private void beforeStart() {
+        mPref = getSharedPreferences("config", MODE_PRIVATE);
+        isNight = mPref.getBoolean("night", false);
+        if (isNight) {
+            //设置为夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            //设置为非夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+
 
     /*
     * @desc 跳转到 home页面

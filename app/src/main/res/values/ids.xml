@@ -36,4 +36,5 @@
     <item name="liv_kanzhihu" type="id">liv_kanzhihu</item>
     <item name="tb_about_me" type="id">tb_about_me</item>
     <item name="my_progress" type="id">my_progress</item>
+    <item name="siv_setting_night_mode" type="id">siv_setting_night_mode</item>
 </resources>

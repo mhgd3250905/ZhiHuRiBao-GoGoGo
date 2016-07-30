@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,14 +44,32 @@ public class KanzhihuQuestionListActivity extends AppCompatActivity {
     private List<Answer> mData;
     private SharedPreferences mPref;
     private String url;
+    private boolean isNight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPref=getSharedPreferences("config",MODE_PRIVATE);
+        beforeStart();
         initUI();
         initData();
     }
+
+    /*
+  * @desc 开始加载UI之前处理所有的动作
+  * @时间 2016/7/24 11:32
+  */
+    private void beforeStart() {
+        mPref = getSharedPreferences("config", MODE_PRIVATE);
+        isNight = mPref.getBoolean("night", false);
+        if (isNight) {
+            //设置为夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            //设置为非夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
 
     private void initUI() {
         setContentView(R.layout.activity_kanzhihu_question_list);

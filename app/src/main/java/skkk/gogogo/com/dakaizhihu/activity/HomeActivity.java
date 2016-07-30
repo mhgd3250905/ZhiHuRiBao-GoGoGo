@@ -2,6 +2,7 @@ package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,11 +30,32 @@ import skkk.gogogo.com.dakaizhihu.fragment.ThemeMainFragment;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SharedPreferences mPref;
+    private boolean isNight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        beforeStart();
         initUI();
         setDefaultFragment();
+    }
+
+
+    /*
+  * @desc 开始加载UI之前处理所有的动作
+  * @时间 2016/7/24 11:32
+  */
+    private void beforeStart() {
+        mPref = getSharedPreferences("config", MODE_PRIVATE);
+        isNight = mPref.getBoolean("night", false);
+        if (isNight) {
+            //设置为夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            //设置为非夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     /*

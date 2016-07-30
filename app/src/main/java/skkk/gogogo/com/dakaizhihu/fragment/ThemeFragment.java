@@ -153,9 +153,13 @@ public class ThemeFragment extends Fragment {
                 public void onItemClick(View view, int position) {
                     final int id = mData.get(position).getId();
 
-                    Intent intent=new Intent();
-                    intent.putExtra("news_id",id);
-                    intent.putExtra("image",mData.get(position).getImages().get(0));
+                    Intent intent = new Intent();
+                    intent.putExtra("news_id", id);
+                    try {
+                        intent.putExtra("image", mData.get(position).getImages().get(0));
+                    } catch (Exception e) {
+                        intent.putExtra("image", "");
+                    }
                     intent.setClass(getContext(), NewsDetailActivity.class);
                     startActivity(intent);
                 }

@@ -1,6 +1,6 @@
 <resources>>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme" parent="AppTheme.NoActionBar">
         <!-- 溢出菜单图标颜色-->
         <item name="colorControlNormal">@color/white</item>
         <!-- 左边箭头 -->
@@ -13,8 +13,19 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight">
+        <!-- 溢出菜单图标颜色-->
+        <item name="colorControlNormal">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <style name="AppTheme.Splash">
         <!--透明状态栏-->

@@ -7,9 +7,10 @@
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:stateListAnimator="@anim/test"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="@color/card_background">
 
     <LinearLayout
+        android:background="@color/card_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">

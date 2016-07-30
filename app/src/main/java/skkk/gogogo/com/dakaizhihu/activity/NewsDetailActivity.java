@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private int newsId;
     private Boolean imageMode;
     private String imageUrl;
+    private boolean isNight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +107,16 @@ public class NewsDetailActivity extends AppCompatActivity {
         imageUrl=intent.getStringExtra("image");
         //获取是否为无图模式
         mPref=getSharedPreferences("config", MODE_PRIVATE);
-
+        isNight = mPref.getBoolean("night", false);
+        if (isNight) {
+            //设置为夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            //设置为非夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
+
 
 
     /*
@@ -318,6 +328,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 //这里通过Jsoup来获取html文本文件中的dom然后进行对应的修改
                 doc_dis = Jsoup.parse(newsDetailsData.getBody());
 
+
+
                 //把html中所有的图片都大小设置为适应100%，遇到作者头像图片设置为适应8%
                 Elements ele_Img = doc_dis.getElementsByTag("img");
                 if (ele_Img.size() != 0) {
@@ -335,7 +347,11 @@ public class NewsDetailActivity extends AppCompatActivity {
                     for (Element e_div : ele_Div) {
                         //e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:13px");
                         if (e_div.className().equals("main-wrap content-wrap")) {
-                            e_div.attr("style", "margin:7");
+                            if(isNight){
+                                e_div.attr("style", "padding:10;background-color:#282727;color:#cfcfcf");
+                            }else{
+                                e_div.attr("style", "padding:10");
+                            }
                         }else if(e_div.className().equals("view-more")){
                             e_div.attr("style", "text-align:center");
                         }
@@ -367,7 +383,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 values.put("title", newsTitle);
                 //写入数据库
                 db.insert("News", null, values);
-
+                mPref.edit().putBoolean("data_store",true).commit();
                 //我们在UI线程中进行UI更新的操作
                 runOnUiThread(new Runnable() {
                     @Override

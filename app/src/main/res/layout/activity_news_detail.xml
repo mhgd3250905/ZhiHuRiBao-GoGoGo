@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="skkk.gogogo.com.dakaizhihu.activity.NewsDetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -45,13 +46,13 @@
         android:id="@id/NSV_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <WebView
-                android:fitsSystemWindows="true"
+                android:background="@color/background"
                 android:id="@id/wv_news_details"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp" />
+                android:layout_height="match_parent" />
     </skkk.gogogo.com.dakaizhihu.View.MyNestScrollView>
 
 

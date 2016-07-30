@@ -1,8 +1,10 @@
 package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -28,14 +30,34 @@ public class WebPageActivity extends AppCompatActivity {
     private String url;
     private String desc;
     private String imageUrl;
+    private SharedPreferences mPref;
+    private boolean isNight;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        beforeStart();
         initUI();
         initData();
     }
+
+    /*
+  * @desc 开始加载UI之前处理所有的动作
+  * @时间 2016/7/24 11:32
+  */
+    private void beforeStart() {
+        mPref = getSharedPreferences("config", MODE_PRIVATE);
+        isNight = mPref.getBoolean("night", false);
+        if (isNight) {
+            //设置为夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            //设置为非夜间模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
 
 
     private void initUI() {
