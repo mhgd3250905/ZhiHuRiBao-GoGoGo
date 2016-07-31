@@ -41,6 +41,9 @@ import org.jsoup.select.Elements;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.favorite.WechatFavorite;
 import skkk.gogogo.com.dakaizhihu.NewsDetailsGson.NewDetailsData;
 import skkk.gogogo.com.dakaizhihu.R;
 import skkk.gogogo.com.dakaizhihu.utils.LogUtils;
@@ -139,6 +142,55 @@ public class NewsDetailActivity extends AppCompatActivity {
                 imageSource=cursor.getString(2);
                 Log.d("TAG","--------------------------"+imageSource);
                 newsHtmlContent=cursor.getString(3);
+
+
+                doc_dis = null;
+                //这里通过Jsoup来获取html文本文件中的dom然后进行对应的修改
+                doc_dis = Jsoup.parse(newsHtmlContent);
+
+
+
+                //把html中所有的图片都大小设置为适应100%，遇到作者头像图片设置为适应8%
+                Elements ele_Img = doc_dis.getElementsByTag("img");
+                if (ele_Img.size() != 0) {
+                    for (Element e_Img : ele_Img) {
+                        e_Img.attr("style", "width:100%");
+                        if (e_Img.className().equals("avatar")) {
+                            e_Img.attr("style", "width:8%");
+                        }
+                    }
+                }
+
+                //html中所有文字设置为下面的属性编剧为7dp
+                Elements ele_Div=doc_dis.getElementsByTag("div");
+                if (ele_Div.size() != 0) {
+                    for (Element e_div : ele_Div) {
+                        //e_div.attr("style", "line-height:155%;font-family:微软雅黑 SC;color:#141414;font-size:13px");
+                        if (e_div.className().equals("main-wrap content-wrap")) {
+                            if(isNight){
+                                e_div.attr("style", "padding:10;background-color:#282727;color:#cfcfcf");
+                            }else{
+                                e_div.attr("style", "padding:10");
+                            }
+                        }else if(e_div.className().equals("view-more")){
+                            e_div.attr("style", "text-align:center");
+                        }
+
+                    }
+                }
+
+                //设置html文本中的超链接文字style
+                Elements ele_herf=doc_dis.getElementsByTag("a");
+                if (ele_herf.size() != 0) {
+                    for (Element e_herf : ele_herf) {
+                        e_herf.attr("style","font-family:微软雅黑;color:#607d8b");
+                    }
+                }
+                //获得webView加载需要的html文本
+
+                newsHtmlContent = doc_dis.toString();
+
+
                 Log.d("TAG","--------------------------content");
                 shareURL=cursor.getString(5);
                 newsTitle=cursor.getString(6);
@@ -185,6 +237,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
 
 
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
 
         // WebViewClient用来处理WebView各种通知、请求事件等,重写里面的方法即可
         mWebView.setWebViewClient(new WebViewClient() {
@@ -230,6 +284,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     * @时间 2016/7/24 22:52
     */
     private void setSettings(WebSettings setting) {
+        setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         setting.setDefaultTextEncodingName("UTF-8");//设置webview的默认编码格式
         setting.setJavaScriptEnabled(true);
         setting.setBuiltInZoomControls(true);
@@ -265,21 +320,29 @@ public class NewsDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_share) {
-            ShareSDK.initSDK(this);
-            OnekeyShare oks = new OnekeyShare();
-            oks.setTitle(newsTitle);
-            oks.setText(newsTitle);
-            oks.setUrl(shareURL);
-
-            if(!TextUtils.isEmpty(titleImage)){
-                oks.setImageUrl(titleImage);
-            }else if(!TextUtils.isEmpty(imageUrl)){
-                oks.setImageUrl(imageUrl);
-            }else{
-                oks.setImageUrl(getResources().getString(R.string.image_default));
-            }
-
-            oks.show(NewsDetailActivity.this);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ShareSDK.initSDK(NewsDetailActivity.this);
+                    OnekeyShare oks = new OnekeyShare();
+                    //隐藏微信收藏
+                    oks.addHiddenPlatform(WechatFavorite.NAME);
+                    oks.addHiddenPlatform(SinaWeibo.NAME);
+                    oks.addHiddenPlatform(QZone.NAME);
+                    oks.setCustomerLogo(null, null, null);
+                    oks.setTitle(newsTitle);
+                    oks.setText(newsTitle);
+                    oks.setUrl(shareURL);
+                    if(!TextUtils.isEmpty(titleImage)){
+                        oks.setImageUrl(titleImage);
+                    }else if(!TextUtils.isEmpty(imageUrl)){
+                        oks.setImageUrl(imageUrl);
+                    }else{
+                        oks.setImageUrl(getResources().getString(R.string.image_default));
+                    }
+                    oks.show(NewsDetailActivity.this);
+                }
+            }).start();
             return true;
         }
 

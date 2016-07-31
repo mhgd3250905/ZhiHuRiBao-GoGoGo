@@ -8,20 +8,22 @@
 
 package cn.sharesdk.onekeyshare;
 
-import static com.mob.tools.utils.BitmapHelper.captureView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.mob.tools.utils.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import com.mob.tools.utils.R;
+
+import static com.mob.tools.utils.BitmapHelper.captureView;
 
 /**
 * 快捷分享的入口
@@ -29,6 +31,7 @@ import com.mob.tools.utils.R;
 * 通过不同的setter设置参数，然后调用{@link #show(Context)}方法启动快捷分享
 */
 public class OnekeyShare {
+
 	private HashMap<String, Object> params;
 
 	public OnekeyShare() {

@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="作者：S大开"
-            android:textColor="@color/colorPrimaryDark"
+
             android:textSize="20dp"
             android:paddingLeft="10dp"
             />
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="简介：一个BBoy"
-            android:textColor="@color/colorPrimaryDark"
+
             android:textSize="20dp"
             android:paddingLeft="10dp"
             />
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="https://github.com/mhgd3250905"
-            android:textColor="@color/colorPrimaryDark"
+
             android:textSize="15dp"
             android:paddingLeft="10dp"
             />
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="我清晨乘坐上海拥挤的地铁去上班\n下班回到宿舍已经是黑夜\n抽出空来学习并制作了大开知乎\n如果碰巧你觉得还不错\n我不介意告诉你我的支付宝"
-            android:textColor="@color/colorPrimaryDark"
+
             android:textSize="15dp"
             android:paddingLeft="10dp"
             />
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="支付宝账号：13671646071"
-            android:textColor="@color/colorPrimaryDark"
+
             android:textSize="20dp"
             android:paddingLeft="10dp"
             />

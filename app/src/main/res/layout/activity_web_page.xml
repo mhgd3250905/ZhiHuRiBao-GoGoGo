@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
             <android.support.v7.widget.Toolbar
+                android:background="@color/colorPrimaryDark"
                 android:id="@+id/tb_web_page"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -31,6 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <WebView
+            android:scrollbarSize="0dp"
+            android:scrollbarStyle="insideOverlay"
             android:id="@id/wv_web_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></WebView>
