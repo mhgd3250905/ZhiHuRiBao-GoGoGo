@@ -2,6 +2,8 @@ package skkk.gogogo.com.dakaizhihu.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -11,9 +13,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -21,6 +25,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import skkk.gogogo.com.dakaizhihu.R;
+import skkk.gogogo.com.dakaizhihu.utils.NetUtils;
 
 public class WebPageActivity extends AppCompatActivity {
     @ViewInject(R.id.tb_web_page)
@@ -32,6 +37,7 @@ public class WebPageActivity extends AppCompatActivity {
     private String imageUrl;
     private SharedPreferences mPref;
     private boolean isNight;
+    private NetUtils netUtils;
 
 
     @Override
@@ -75,7 +81,32 @@ public class WebPageActivity extends AppCompatActivity {
         WebSettings webSetting = wvWebPage.getSettings();//获取webview的设置
         setSettings(webSetting);
 
-        webSetting.setBlockNetworkImage(true);
+
+        /*
+        判断是否为wifi模式
+        倘若是wifi模式则关闭无图模式
+        倘若非wifi模式则开启无图模式
+        */
+        netUtils = new NetUtils();
+
+        if(netUtils.isWifi(this)){
+            Toast.makeText(WebPageActivity.this, "当前为wifi模式", Toast.LENGTH_SHORT).show();
+            webSetting.setBlockNetworkImage(false);
+            if (Build.VERSION.SDK_INT >= 21) {
+                webSetting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
+            wvWebPage.setWebViewClient(new WebViewClient() {
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    //handler.cancel(); // Android默认的处理方式
+                    handler.proceed();  // 接受所有网站的证书
+                    //handleMessage(Message msg); // 进行其他处理
+                }
+            });
+
+        }else{
+            webSetting.setBlockNetworkImage(true);
+        }
+
 
 
         //设置activity中大开的网页使用本webview打开

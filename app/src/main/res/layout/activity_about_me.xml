@@ -26,7 +26,7 @@
                 app:subtitleTextAppearance="@style/ToolbarTextAppearanceSubTitle"
                 app:titleTextAppearance="@style/ToolbarTextAppearanceTitle"
                 app:subtitleTextColor="@color/white"
-                app:title="大开知乎"
+                app:title="@string/app_name"
                 app:titleTextColor="@color/white" />
         </android.support.design.widget.AppBarLayout>
 
