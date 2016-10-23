@@ -8,21 +8,18 @@
     tools:context="skkk.gogogo.com.dakaizhihu.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
+        style="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimaryDark"
-            app:subtitleTextAppearance="@style/ToolbarTextAppearanceSubTitle"
-            app:titleTextAppearance="@style/ToolbarTextAppearanceTitle"
-            app:subtitleTextColor="@color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:titleTextColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>
 

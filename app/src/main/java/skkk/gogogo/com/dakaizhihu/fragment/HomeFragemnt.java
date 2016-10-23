@@ -1,5 +1,6 @@
 package skkk.gogogo.com.dakaizhihu.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,13 +58,18 @@ public class HomeFragemnt extends android.support.v4.app.Fragment {
     private RequestQueue queue;
     private String url;
 
+    @SuppressLint("ValidFragment")
     public HomeFragemnt(String url) {
         this.url = url;
     }
+
+    public HomeFragemnt() {
+    }
+
     /*
-        * @desc 创建之方法
-        * @时间 2016/6/22 12:44
-        */
+            * @desc 创建之方法
+            * @时间 2016/6/22 12:44
+            */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

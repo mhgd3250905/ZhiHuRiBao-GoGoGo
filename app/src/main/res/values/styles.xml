@@ -9,8 +9,6 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight">
-        <!-- 溢出菜单图标颜色-->
-        <item name="colorControlNormal">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
